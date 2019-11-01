@@ -90,16 +90,7 @@ const createAutoComplete = function(data) {
         }
 
         return function(string) {
-            let data = prefTree.findWords(string);
-
-            // I have a test issue. My [4565] and [4566] answer for sub-search-A are switched places
-            // so I change them with that crutch. but even without this cruch I have all 7001 of 7001 answers.
-            if (data[4566] === "Aquiles Serdán (San Fernando)") {
-                data[4565] = "Aquiles Serdán (San Fernando)";
-                data[4566] = "Aquiles Serdán 1ra. Sección";
-            }
-
-            return data;
+            return prefTree.findWords(string);
         };
     }
 };
