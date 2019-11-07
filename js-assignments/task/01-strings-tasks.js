@@ -289,7 +289,7 @@ function isString(value) {
  *     ...
  *   'Q♠' => 50
  *   'K♠' => 51
- */
+ **/
 function getCardId(value) {
     let result = 0;
     let position = "A2345678910JQK";
