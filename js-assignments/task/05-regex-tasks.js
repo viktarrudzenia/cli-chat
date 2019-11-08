@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /********************************************************************************************
  *                                                                                          *
@@ -6,7 +6,6 @@
  * https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions           *
  *                                                                                          *
  ********************************************************************************************/
-
 
 /**
  * Returns the regexp that matches a GUID string representation
@@ -31,9 +30,8 @@
  * @return {RegExp}
  */
 function getRegexForGuid() {
-   throw new Error('Not implemented');
+    return /{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}}/;
 }
-
 
 /**
  * Returns the regexp that matches all the strings from first column
@@ -53,9 +51,8 @@ function getRegexForGuid() {
  *
  */
 function getRegexForPitSpot() {
-   throw new Error('Not implemented');
+    return /\w*p.t\w*/;
 }
-
 
 /**
  * Returns the regexp that matches all IPv4 strings in
@@ -72,9 +69,9 @@ function getRegexForPitSpot() {
  * @return {RegExp}
  */
 function getRegexForIPv4() {
-   throw new Error('Not implemented');
+    // three cases; 1) 0-any-any, 2) 1-any-any, 3) 2-[0-4]-any or 2-5-5max
+    return /^((0?\d{0,2}|1\d{0,2}|2[0-4][0-9]|25[0-5])\.){3}(0?\d{0,2}|1\d{0,2}|2[0-4][0-9]|25[0-5])$/;
 }
-
 
 /**
  * Returns the regexp that matches all SSN (Social Security Number) codes in
@@ -91,9 +88,8 @@ function getRegexForIPv4() {
  * @return {RegExp}
  */
 function getRegexForSSN() {
-   throw new Error('Not implemented');
+    return /(?!0{3})[0-9]{3}-(?!0{2})[0-9]{2}-(?!0{4})[0-9]{4}/;
 }
-
 
 /**
  * Returns the password validator regex.
@@ -116,9 +112,13 @@ function getRegexForSSN() {
  *   'Pa55'.match(validator) => false
  */
 function getPasswordValidator(minLength) {
-   throw new Error('Not implemented');
-}
+    //positive lookhead needed
+    let regExpForPass = new RegExp(
+        `^(?=.*[a-z]+)+(?=.*[A-Z]+)+(?=.*\\d+)[a-zA-Z0-9]{${minLength},}$`
+    );
 
+    return regExpForPass;
+}
 
 module.exports = {
     getRegexForGuid: getRegexForGuid,
