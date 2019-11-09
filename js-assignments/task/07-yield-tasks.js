@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /********************************************************************************************
  *                                                                                          *
@@ -7,7 +7,6 @@
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield        *
  *                                                                                          *
  ********************************************************************************************/
-
 
 /**
  * Returns the lines sequence of "99 Bottles of Beer" song:
@@ -33,9 +32,17 @@
  *
  */
 function* get99BottlesOfBeer() {
-    throw new Error('Not implemented');
+    yield `99 bottles of beer on the wall, 99 bottles of beer.`;
+    for (let count = 98; count > 1; count--) {
+        yield `Take one down and pass it around, ${count} bottles of beer on the wall.`;
+        yield `${count} bottles of beer on the wall, ${count} bottles of beer.`;
+    }
+    yield `Take one down and pass it around, 1 bottle of beer on the wall.`;
+    yield `1 bottle of beer on the wall, 1 bottle of beer.`;
+    yield "Take one down and pass it around, no more bottles of beer on the wall.";
+    yield "No more bottles of beer on the wall, no more bottles of beer.";
+    yield "Go to the store and buy some more, 99 bottles of beer on the wall.";
 }
-
 
 /**
  * Returns the Fibonacci sequence:
@@ -47,9 +54,14 @@ function* get99BottlesOfBeer() {
  *
  */
 function* getFibonacciSequence() {
-    throw new Error('Not implemented');
+    yield 0;
+    yield 1;
+    let state = [0, 1];
+    for (let i = 1; i < 50; i++) {
+        state.push(state[i] + state[i - 1]);
+        yield state[i + 1];
+    }
 }
-
 
 /**
  * Traverses a tree using the depth-first strategy
@@ -82,9 +94,29 @@ function* getFibonacciSequence() {
  *
  */
 function* depthTraversalTree(root) {
-    throw new Error('Not implemented');
+    // let node1 = { n: 1 },
+    //     node2 = { n: 2 },
+    //     node3 = { n: 3 },
+    //     node4 = { n: 4 },
+    //     node5 = { n: 5 },
+    //     node6 = { n: 6 },
+    //     node7 = { n: 7 },
+    //     node8 = { n: 8 };
+    // node1.children = [node2, node6, node7];
+    // node2.children = [node3, node4];
+    // node4.children = [node5];
+    // node7.children = [node8];
+    let arrayStack = [];
+    arrayStack.push(root);
+    for (let i = 0; i < arrayStack.length; ) {
+        let currentNode = arrayStack.pop();
+        if (currentNode.children) {
+            // reverse it for wright node sequence!!!
+            arrayStack.push(...currentNode.children.reverse());
+        }
+        yield currentNode;
+    }
 }
-
 
 /**
  * Traverses a tree using the breadth-first strategy
@@ -108,9 +140,17 @@ function* depthTraversalTree(root) {
  *
  */
 function* breadthTraversalTree(root) {
-    throw new Error('Not implemented');
+    let arrayStack = [];
+    arrayStack.push(root);
+    for (let i = 0; i < arrayStack.length; ) {
+        let currentNode = arrayStack.pop();
+        if (currentNode.children) {
+            // reverse it for wright node sequence!!!
+            arrayStack.unshift(...currentNode.children.reverse());
+        }
+        yield currentNode;
+    }
 }
-
 
 /**
  * Merges two yield-style sorted sequences into the one sorted sequence.
@@ -126,9 +166,28 @@ function* breadthTraversalTree(root) {
  *   [ 1, 3, 5, ... ], [ -1 ] => [ -1, 1, 3, 5, ...]
  */
 function* mergeSortedSequences(source1, source2) {
-    throw new Error('Not implemented');
+    let firstIterator = source1();
+    let secondIterator = source2();
+    let firstValue = firstIterator.next().value;
+    let secondValue = secondIterator.next().value;
+    for (let i = 0; ; i++) {
+        if (firstValue < secondValue) {
+            yield firstValue;
+            firstValue = firstIterator.next().value;
+            if (firstValue === undefined) {
+                firstValue = 10e24;
+            }
+        } else if (secondValue < firstValue) {
+            yield secondValue;
+            secondValue = secondIterator.next().value;
+            if (secondValue === undefined) {
+                secondValue = 10e24;
+            }
+        } else {
+            continue;
+        }
+    }
 }
-
 
 module.exports = {
     get99BottlesOfBeer: get99BottlesOfBeer,
