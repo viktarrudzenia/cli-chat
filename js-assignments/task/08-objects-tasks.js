@@ -106,35 +106,101 @@ function fromJSON(proto, json) {
  *  For more examples see unit tests.
  */
 
-const cssSelectorBuilder = {
-    element: function(value) {
-        throw new Error("Not implemented");
-    },
+class ClassCssSelectorBuilder {
+    constructor(result = "", queue = []) {
+        this.isCorrect(queue);
 
-    id: function(value) {
-        throw new Error("Not implemented");
-    },
-
-    class: function(value) {
-        throw new Error("Not implemented");
-    },
-
-    attr: function(value) {
-        throw new Error("Not implemented");
-    },
-
-    pseudoClass: function(value) {
-        throw new Error("Not implemented");
-    },
-
-    pseudoElement: function(value) {
-        throw new Error("Not implemented");
-    },
-
-    combine: function(selector1, combinator, selector2) {
-        throw new Error("Not implemented");
+        this.result = result;
+        this.queue = queue;
     }
-};
+
+    element(value) {
+        return new ClassCssSelectorBuilder(
+            `${this.result}${value}`,
+            this.queue.concat(["element"])
+        );
+    }
+    id(value) {
+        return new ClassCssSelectorBuilder(`${this.result}#${value}`, this.queue.concat(["id"]));
+    }
+    class(value) {
+        return new ClassCssSelectorBuilder(`${this.result}.${value}`, this.queue.concat(["class"]));
+    }
+    attr(value) {
+        return new ClassCssSelectorBuilder(`${this.result}[${value}]`, this.queue.concat(["attr"]));
+    }
+    pseudoClass(value) {
+        return new ClassCssSelectorBuilder(
+            `${this.result}:${value}`,
+            this.queue.concat(["pseudoClass"])
+        );
+    }
+    pseudoElement(value) {
+        return new ClassCssSelectorBuilder(
+            `${this.result}::${value}`,
+            this.queue.concat(["pseudoElement"])
+        );
+    }
+
+    isCorrect(queue) {
+        if (queue.length <= 1) {
+            return;
+        }
+
+        let obj = {};
+        for (let i = 0; i < queue.length; i++) {
+            if (obj[queue[i]] == undefined) {
+                obj[queue[i]] = true;
+            } else if (
+                queue[i] === "element" ||
+                queue[i] === "id" ||
+                queue[i] === "pseudoElement"
+            ) {
+                this.clearQueue();
+                throw new Error(
+                    "Element, id and pseudo-element should not occur more then one time inside the selector"
+                );
+            }
+        }
+
+        let rightQueuePosition = {
+            element: 0,
+            id: 1,
+            class: 2,
+            attr: 3,
+            pseudoClass: 4,
+            pseudoElement: 5
+        };
+        let arrayWithQueueNumberPosition = [];
+        for (let i = 0; i < queue.length; i++) {
+            arrayWithQueueNumberPosition.push(rightQueuePosition[queue[i]]);
+        }
+
+        for (let i = 0; i < arrayWithQueueNumberPosition.length; i++) {
+            if (arrayWithQueueNumberPosition[i] > arrayWithQueueNumberPosition[i + 1]) {
+                this.clearQueue();
+                throw new Error(
+                    "Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element"
+                );
+            }
+        }
+    }
+
+    clearQueue() {
+        this.result = "";
+        this.queue = [];
+    }
+
+    combine(selector1, combinator, selector2) {
+        return new ClassCssSelectorBuilder(`${selector1.result} ${combinator} ${selector2.result}`);
+    }
+
+    stringify() {
+        return this.result;
+    }
+}
+
+let cssSelectorBuilder = new ClassCssSelectorBuilder();
 
 module.exports = {
     Rectangle: Rectangle,
