@@ -34,14 +34,15 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  padding-top: 20%;
+  padding-top: 10%;
 }
 
 #input {
-  margin: 10% 0;
+  margin: 5% 0;
 }
 
 #divWithResult {
+  padding: 0 20%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
