@@ -26,11 +26,15 @@ function addAllElements() {
 
     // elements displayed must > 30
     const AMOUNT_OF_ELEMENTS_DISPLAYED = 50;
-    const PX_ELEMENTS_OCCUPYIED = AMOUNT_OF_ELEMENTS_DISPLAYED * 14;
-    const PX_WHEN_LOAD_NEXT = AMOUNT_OF_ELEMENTS_DISPLAYED * 25;
+
+    const PX_ONE_ELEMENT_OCCUPY = 25;
+    const PX_FOR_ONE_ELEMENT_WHEN_LOAD_NEXT = 12;
+
+    const PX_WHEN_LOAD_NEXT = AMOUNT_OF_ELEMENTS_DISPLAYED * PX_FOR_ONE_ELEMENT_WHEN_LOAD_NEXT;
+    const PX_ELEMENTS_OCCUPYIED = AMOUNT_OF_ELEMENTS_DISPLAYED * PX_ONE_ELEMENT_OCCUPY;
     function wrapperDrawInResult() {
-        return drawInResult(prefixTree, AMOUNT_OF_ELEMENTS_DISPLAYED, PX_ELEMENTS_OCCUPYIED,
-            PX_WHEN_LOAD_NEXT, divWithInput, divWithResult);
+        return drawInResult(prefixTree, AMOUNT_OF_ELEMENTS_DISPLAYED, PX_WHEN_LOAD_NEXT,
+            PX_ELEMENTS_OCCUPYIED, divWithInput, divWithResult);
     }
     // Track what in input and append in result
     divWithInput.oninput = wrapperDrawInResult;
