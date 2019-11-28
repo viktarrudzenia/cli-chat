@@ -41,7 +41,7 @@ function drawInResult(prefixTree, AMOUNT_OF_ELEMENTS_DISPLAYED,
 
         listOfresultCities = compileListOfresultCities(AMOUNT_OF_ELEMENTS_DISPLAYED,
             resultCities, listOfresultCities);
-        newDiv.innerHTML = `Autocomplete found ${resultCitiesLength} element/s <ol>${listOfresultCities}</ol>`;
+        newDiv.innerHTML = 'Autocomplete found ' + resultCitiesLength + ' element/s <ol>' + listOfresultCities + '</ol>';
         divWithResult.appendChild(newDiv);
 
 
@@ -49,9 +49,9 @@ function drawInResult(prefixTree, AMOUNT_OF_ELEMENTS_DISPLAYED,
         window.addEventListener('scroll', wrapperCheckScroll);
     } else {
         const listOfresultCities = resultCities
-            .map((element) => `<li>${element}</li>\n`)
+            .map((element) => '<li>' + element + '</li>\n')
             .join('');
-        newDiv.innerHTML = `Autocomplete found ${resultCitiesLength} element/s <ol>${listOfresultCities}</ol>`;
+        newDiv.innerHTML = 'Autocomplete found ' + resultCitiesLength + ' element/s <ol>' + listOfresultCities + '</ol>';
         divWithResult.appendChild(newDiv);
     }
 }

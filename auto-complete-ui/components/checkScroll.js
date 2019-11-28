@@ -19,10 +19,10 @@ function checkScroll(input, currentInput, start, counter, listOfresultCities, cu
             i < counter && i < resultCitiesLength;
             i += 1
         ) {
-            listOfresultCities += `<li>${resultCities[i]}</li>\n`;
+            listOfresultCities += '<li>' + resultCities[i] + '</li>\n';
         }
         clearDivWithResult(divWithResult, CLEAR_ALL_RESULT);
-        newDiv.innerHTML = `Autocomplete found ${resultCitiesLength} element/s <ol>${listOfresultCities}</ol>`;
+        newDiv.innerHTML = 'Autocomplete found ' + resultCitiesLength + ' element/s <ol>' + listOfresultCities + '</ol>';
         divWithResult.appendChild(newDiv);
         window.removeEventListener('scroll', checkCheckScroll);
 
