@@ -1,0 +1,17 @@
+{
+  "name": "cli-chat",
+  "version": "1.0.0",
+  "description": "chat",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Viktar Rudzenia",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^3.0.0",
+    "prompts": "^2.3.0",
+    "ws": "^7.2.0"
+  }
+}
