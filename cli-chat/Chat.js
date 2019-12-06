@@ -1,12 +1,17 @@
 /* eslint-disable no-console */
 const WebSocket = require('ws');
-// const fs = require('fs');
+const fs = require('fs');
+const path = require('path');
 const chalk = require('chalk');
 const prompts = require('prompts');
+// const TelegramBot = require('node-telegram-bot-api');
 //  const readline = require('readline');
 // readline.moveCursor(process.stdout, 0, -1);
 
 const wsChatURL = 'ws://chat.shas.tel';
+
+// const token = '985262384:AAGGg-tnEXiai8fKOk64pgE-kWM6R6bDwN0';
+// const bot = new TelegramBot(token, { polling: true });
 
 const questions = [
     {
@@ -14,6 +19,7 @@ const questions = [
         name: 'username',
         message: 'Hello stranger. Please enter your username?',
         initial: 'anonymous',
+        validate: (value) => ((value.length >= 128) ? 'Length of your username should be less than 128 letters' : true),
     },
     {
         type: 'text',
@@ -25,7 +31,7 @@ const questions = [
 
 const onSubmit = (prompt, answer) => console.log(`Got it. your ${chalk.red(prompt.name)} now is: ${chalk.green(answer)}`);
 const onCancel = (prompt) => {
-    console.log('You avoid from settings now you wil be disconnected');
+    console.log('You avoid chat settings. Now you wil be disconnected...');
     return false;
 };
 
@@ -39,11 +45,12 @@ const onCancel = (prompt) => {
     const ws = await new WebSocket(wsChatURL);
 
     ws.on('open', () => {
-        console.log(`Welcome home ${chalk.green(response.username)}. You connected to the chat`);
+        console.log(`--------------------------------------------------------------------------------------------
+            Welcome home ${chalk.green(response.username)}. You connected to the chat ${chalk.green(wsChatURL)}
+     --------------------------------------------------------------------------------------------`);
     });
 
     ws.on('message', (data) => {
-        const newData = JSON.parse(data);
         const timeOptions = {
             day: '2-digit',
             year: '2-digit',
@@ -64,9 +71,9 @@ const onCancel = (prompt) => {
         ];
 
         function generateRGBColor() {
-            const r = Math.floor(Math.random() * 256); // Random between 0-255
-            const g = Math.floor(Math.random() * 256); // Random between 0-255
-            const b = Math.floor(Math.random() * 256); // Random between 0-255
+            const r = Math.floor(Math.random() * 256);
+            const g = Math.floor(Math.random() * 256);
+            const b = Math.floor(Math.random() * 256);
             return [r, g, b];
         }
 
@@ -88,7 +95,7 @@ const onCancel = (prompt) => {
         const allUsersWithColors = {
         };
 
-        newData.reverse();
+        const newData = JSON.parse(data).reverse();
 
         for (let i = 0; i < newData.length; i += 1) {
             // if (newData[i].from === response.username) {
@@ -112,11 +119,11 @@ const onCancel = (prompt) => {
     });
 
     ws.on('error', (error) => {
-        console.log('Error: ', error);
+        console.error('Error: ', error);
     });
 
-    ws.on('close', (code) => {
-        console.log(`Disconnected from the chat with ${chalk.red(code)} code`);
+    ws.on('close', (code, reason) => {
+        console.log(`Server: You disconnected from the chat ${chalk.green(wsChatURL)} with ${chalk.red(code)} code and this reason: '${chalk.red(reason)}'`);
     });
 
     for (let i = 0; i < 10e8; i += 1) {
@@ -124,13 +131,23 @@ const onCancel = (prompt) => {
             type: 'text',
             name: 'message',
             message: '',
-            validate: (value) => ((value === '') ? 'Input something please' : true),
+            validate: (value) => {
+                if (value === '') {
+                    return 'Input something please';
+                } if (value.length >= 1024) {
+                    return 'Length of your message should be less than 1024 symbols';
+                }
+                return true;
+            },
         }];
 
         const onSubmit = (prompt, answer) => console.log(`Your message: "${chalk.green(answer)}" sended to chat`);
         const onCancel = (prompt) => {
-            console.log('You exit from the chat');
+            console.log(`     --------------------------------------------------------------------------------------------
+            You exit from the chat ${chalk.green(wsChatURL)}. Goodbye ${chalk.green(response.username)}.
+     --------------------------------------------------------------------------------------------`);
             i = Infinity;
+            ws.close(1000, 'I\'m leaving this chat');
             return false;
         };
         const response2 = await prompts(questions, { onSubmit, onCancel });
