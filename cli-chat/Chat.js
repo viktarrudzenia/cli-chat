@@ -91,6 +91,10 @@ const connect = function () {
 
         ws.on('error', (error) => {
             console.error('Error: ', error);
+            console.log(`         --------------------------------------------------------------------------------------------
+                Trying to reconnect to chat ${chalk.green(wsChatURL)}... with ${chalk.green(reconnectInterval / 1000)}s interval
+         --------------------------------------------------------------------------------------------`);
+            setTimeout(connect, reconnectInterval);
         });
 
         ws.on('close', (code, reason) => {
