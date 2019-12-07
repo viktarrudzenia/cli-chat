@@ -5,10 +5,20 @@ const path = require('path');
 const chalk = require('chalk');
 const prompts = require('prompts');
 const dotenv = require('dotenv');
+const notifier = require('node-notifier');
 // const TelegramBot = require('node-telegram-bot-api');
-//  const readline = require('readline');
-// readline.moveCursor(process.stdout, 0, -1);
-dotenv.config();
+const readline = require('readline');
+
+// notifier.notify({
+//     title: 'My notification',
+//     message: 'Hello, there!',
+// });
+
+const result = dotenv.config();
+
+if (result.error) {
+    throw result.error;
+}
 
 const wsChatURL = 'ws://chat.shas.tel';
 
@@ -38,6 +48,8 @@ const onCancel = (prompt) => {
 };
 
 const reconnectInterval = 1000 * 2;
+
+let isNewMessage = false;
 
 const connect = function () {
     (async () => {
@@ -77,6 +89,13 @@ const connect = function () {
 
             const newData = JSON.parse(data).reverse();
 
+            if (isNewMessage && newData[0].from !== response.username) {
+                notifier.notify({
+                    title: `New message in chat: ${wsChatURL}`,
+                    message: `${newData[0].from} said: '${newData[0].message}`,
+                });
+            }
+
             for (let i = 0; i < newData.length; i += 1) {
                 if (newData[i].from === response.username) {
                     console.log(`${chalk.blue(new Date(newData[i].time).toLocaleDateString('en-US', timeOptions))} ${chalk.bold.bgGreen.keyword('black')(newData[i].from)}: ${chalk.bgGreen.keyword('black')(newData[i].message)}`);
@@ -87,6 +106,7 @@ const connect = function () {
                     console.log(`${chalk.blue(new Date(newData[i].time).toLocaleDateString('en-US', timeOptions))} ${chalk.bold.rgb(...allUsersWithColors[newData[i].from])(newData[i].from)}: ${chalk.bold.rgb(...allUsersWithColors[newData[i].from])(newData[i].message)}`);
                 }
             }
+            isNewMessage = true;
         });
 
         ws.on('error', (error) => {
@@ -128,8 +148,13 @@ const connect = function () {
                 },
             }];
 
-            const onSubmit = (prompt, answer) => console.log(`Your message: "${chalk.green(answer)}" sended to chat`);
+            const onSubmit = (prompt, answer) => {
+                console.log(`Your message: "${chalk.green(answer)}" sended to chat`);
+                readline.moveCursor(process.stdout, 0, -1);
+                readline.moveCursor(process.stdout, 0, -1);
+            };
             const onCancel = (prompt) => {
+                readline.moveCursor(process.stdout, 0, -1);
                 console.log(`         --------------------------------------------------------------------------------------------
                 You exit from the chat ${chalk.green(wsChatURL)}. Goodbye ${chalk.green(response.username)}.
          --------------------------------------------------------------------------------------------`);
@@ -138,6 +163,7 @@ const connect = function () {
                 return false;
             };
             const response2 = await prompts(questions, { onSubmit, onCancel });
+
             const msg = {
                 from: response.username,
                 message: response2.message,
