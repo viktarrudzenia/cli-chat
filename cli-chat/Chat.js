@@ -4,13 +4,15 @@ const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 const prompts = require('prompts');
+const dotenv = require('dotenv');
 // const TelegramBot = require('node-telegram-bot-api');
 //  const readline = require('readline');
 // readline.moveCursor(process.stdout, 0, -1);
+dotenv.config();
 
 const wsChatURL = 'ws://chat.shas.tel';
 
-// const token = '985262384:AAGGg-tnEXiai8fKOk64pgE-kWM6R6bDwN0';
+const token = process.env.TOKEN;
 // const bot = new TelegramBot(token, { polling: true });
 
 const questions = [
@@ -112,8 +114,9 @@ const connect = function () {
                 name: 'message',
                 message: '',
                 validate: (value) => {
-                    // if (value === '') {
-                    //     return 'Input something please'; }
+                    if (value === '') {
+                        return 'Input something please';
+                    }
                     if (value.length >= 1024) {
                         return 'Length of your message should be less than 1024 symbols';
                     }
