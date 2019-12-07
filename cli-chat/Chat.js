@@ -5,14 +5,9 @@ const path = require('path');
 const chalk = require('chalk');
 const prompts = require('prompts');
 const dotenv = require('dotenv');
+const readline = require('readline');
 const notifier = require('node-notifier');
 // const TelegramBot = require('node-telegram-bot-api');
-const readline = require('readline');
-
-// notifier.notify({
-//     title: 'My notification',
-//     message: 'Hello, there!',
-// });
 
 const result = dotenv.config();
 
