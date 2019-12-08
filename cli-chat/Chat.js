@@ -89,8 +89,9 @@ const connect = function () {
                     title: `New message in chat: ${wsChatURL}`,
                     message: `${newData[0].from} said: '${newData[0].message}`,
                 });
+                console.log('');
+                readline.moveCursor(process.stdout, 0, -1);
             }
-
             for (let i = 0; i < newData.length; i += 1) {
                 if (newData[i].from === response.username) {
                     console.log(`${chalk.blue(new Date(newData[i].time).toLocaleDateString('en-US', timeOptions))} ${chalk.bold.bgGreen.keyword('black')(newData[i].from)}: ${chalk.bgGreen.keyword('black')(newData[i].message)}`);
@@ -144,7 +145,7 @@ const connect = function () {
             }];
 
             const onSubmit = (prompt, answer) => {
-                console.log(`Your message: "${chalk.green(answer)}" sended to chat`);
+                console.log(`You send to chat: "${chalk.green(answer)}"`);
                 readline.moveCursor(process.stdout, 0, -1);
                 readline.moveCursor(process.stdout, 0, -1);
             };
