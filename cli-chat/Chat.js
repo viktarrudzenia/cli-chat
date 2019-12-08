@@ -26,7 +26,15 @@ const questions = [
         name: 'username',
         message: 'Hello stranger. Please enter your username?',
         initial: 'anonymous',
-        validate: (value) => ((value.length >= 128) ? 'Length of your username should be less than 128 letters' : true),
+        validate: (value) => {
+            if (value.length >= 128) {
+                return 'Length of your username should be less than 128 letters';
+            } if (value.trim() === '') {
+                return 'Input correct username please, only spaces are not allowed';
+            }
+            return true;
+        },
+        format: (value) => value.trim(),
     },
     {
         type: 'text',
