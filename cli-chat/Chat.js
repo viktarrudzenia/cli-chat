@@ -193,7 +193,7 @@ WSCHATURL = "${response.wsChatURL}"`);
             console.log(`         --------------------------------------------------------------------------------------------
                 Trying to reconnect to chat ${chalk.green(wsChatURL)}... with ${chalk.green(reconnectInterval / 1000)}s interval
          --------------------------------------------------------------------------------------------`);
-            setTimeout(connect(), reconnectInterval);
+            setTimeout(connect, reconnectInterval);
         }
     });
 
