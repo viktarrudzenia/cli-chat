@@ -302,9 +302,7 @@ WSCHATURL = "${response.wsChatURL}"`);
         for (let i = 0; i < newData.length; i += 1) {
             // /////////////////////////////////////////////////////////// HISTORY
             const message = `${new Date(newData[i].time).toLocaleDateString('en-US', timeOptions)} ${newData[i].from}: ${newData[i].message}\n`;
-            fs.appendFile(`./history/${historyFileName}.txt`, message, 'utf-8', (err) => {
-                if (err) throw err;
-            });
+            fs.appendFileSync(`./history/${historyFileName}.txt`, message);
 
             // //////////////////////////////////////////////////////////
 
