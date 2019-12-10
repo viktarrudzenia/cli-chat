@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 const WebSocket = require('ws');
 const fs = require('fs');
+const path = require('path');
 const chalk = require('chalk');
 const prompts = require('prompts');
 const dotenv = require('dotenv');
@@ -13,6 +14,13 @@ const result = dotenv.config();
 if (result.error) {
     throw result.error;
 }
+
+// ///////////////////////////////////// HISTORY
+
+const d = new Date();
+const historyFileName = `${[d.getMonth() + 1, d.getDate(), d.getFullYear()].join('-')} ${[d.getHours(), d.getMinutes(), d.getSeconds()].join('-')}`;
+
+// //////////////////////////////////////////////
 
 // ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -269,6 +277,7 @@ WSCHATURL = "${response.wsChatURL}"`);
             hour: '2-digit',
             minute: '2-digit',
             second: '2-digit',
+            hour12: false,
         };
 
         function generateRGBColor() {
@@ -291,6 +300,14 @@ WSCHATURL = "${response.wsChatURL}"`);
             readline.moveCursor(process.stdout, 0, -1);
         }
         for (let i = 0; i < newData.length; i += 1) {
+            // /////////////////////////////////////////////////////////// HISTORY
+            const message = `${new Date(newData[i].time).toLocaleDateString('en-US', timeOptions)} ${newData[i].from}: ${newData[i].message}\n`;
+            fs.appendFile(`./history/${historyFileName}.txt`, message, 'utf-8', (err) => {
+                if (err) throw err;
+            });
+
+            // //////////////////////////////////////////////////////////
+
             if (newData[i].from === username) {
                 // allChatData.push(`${new Date(newData[i].time).toLocaleDateString('en-US', timeOptions)} ${(newData[i].from)}: ${(newData[i].message)}`);
                 console.log(`${chalk.blue(new Date(newData[i].time).toLocaleDateString('en-US', timeOptions))} ${chalk.bold.bgGreen.keyword('black')(newData[i].from)}: ${chalk.bgGreen.keyword('black')(newData[i].message)}`);
