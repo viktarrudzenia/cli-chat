@@ -4,16 +4,9 @@ const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 const prompts = require('prompts');
-const dotenv = require('dotenv');
 const readline = require('readline');
 const notifier = require('node-notifier');
-const TelegramBot = require('node-telegram-bot-api');
-
-const result = dotenv.config();
-
-if (result.error) {
-    throw result.error;
-}
+const TelegramBot = require('./components/TelegramBot/telegramBot');
 
 // ///////////////////////////////////// HISTORY
 
@@ -22,124 +15,14 @@ const historyFileName = `${[d.getMonth() + 1, d.getDate(), d.getFullYear()].join
 
 // //////////////////////////////////////////////
 
-// ////////////////////////////////////////////////////////////////////////////////////////
-
-// To send message to bot: https://t.me/Cli_Chat_for_ST2019_bot
-
-const token = process.env.TOKEN;
-const bot = new TelegramBot(token, {
-    polling: {
-        params: {
-            timeout: 0,
-        },
-    },
-});
-
-
-const timeOptions = {
-    day: '2-digit',
-    year: '2-digit',
-    month: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-};
-
-const allChatData = [];
-let isStartChatting = false;
-let whoAmI;
-
-bot.onText(/\/happy/, (msg) => {
-    const chatId = msg.chat.id;
-    const happySmile = '😃';
-    bot.sendMessage(chatId, happySmile);
-});
-
-bot.onText(/\/love/, (msg) => {
-    const chatId = msg.chat.id;
-    const loveSmile = '❤';
-    bot.sendMessage(chatId, loveSmile);
-});
-
-bot.onText(/\/startchat/, (msg) => {
-    const chatId = msg.chat.id;
-    const chatUsername = msg.chat.username;
-    const chatDate = +`${msg.date}000`;
-    const chatText = msg.text;
-
-    isStartChatting = true;
-
-    bot.sendMessage(chatId, `Welcome home ${chatUsername}. You connected to the chat: ws://chat.shas.tel`);
-
-    // bot.sendMessage(chatId, JSON.stringify(msg));
-});
-
-bot.onText(/\/stopchat/, (msg) => {
-    const chatId = msg.chat.id;
-    const chatUsername = msg.chat.username;
-    const chatDate = +`${msg.date}000`;
-    const chatText = msg.text;
-
-    isStartChatting = false;
-
-    bot.sendMessage(chatId, `You exit from the chat: ws://chat.shas.tel. Goodbye ${chatUsername}`);
-
-    // bot.sendMessage(chatId, `${new Date(chatDate).toLocaleDateString('en-US', timeOptions)} ${chatUsername}: ${chatText}
-    // You stop chatting in chat "ws://chat.shas.tel"
-    // `);
-});
-
-bot.onText(/\/send (.+)/, (msg, match) => {
-    const chatId = msg.chat.id;
-    const chatUsername = 'cli-chat-rudzenia-bot';
-    const chatDate = +`${msg.date}000`;
-    const chatText = match[1];
-
-    bot.sendMessage(chatId, `${new Date(chatDate).toLocaleDateString('en-US', timeOptions)} ${chatUsername}: ${chatText}`);
-});
-
-bot.onText(/\/help/, (msg) => {
-    const chatId = msg.chat.id;
-    bot.sendMessage(chatId, `Use this commands:
-    /startchat - for start chatting in ws chat
-    /stopchat - for stop chatting in ws chat
-    /send ******* - for send something in ws chat from bot
-    /love - bot sends you a love emoji
-    /happy - bot sends you a happySmile emoji`);
-});
-
-// Listen for any kind of message.
-bot.on('message', (msg) => {
-    if (bot.isPolling() !== true) {
-        return;
-    }
-    const chatId = msg.chat.id;
-    const chatUsername = msg.chat.username;
-    const chatDate = +`${msg.date}000`;
-    const chatText = msg.text;
-    whoAmI = msg.chat.id;
-
-    if (isStartChatting && chatText !== '/stopchat') {
-        bot.sendMessage(chatId, `${new Date(chatDate).toLocaleDateString('en-US', timeOptions)} ${chatUsername}: ${chatText}`);
-    } else if (chatText === '/startchat' || chatText === '/stopchat' || chatText === '/help' || /^\/send /.exec(chatText) !== null) {
-        // eslint-disable-next-line no-useless-return
-        return;
-    } else {
-        bot.sendMessage(chatId, `Unknown command: "${chatText}".
-Use /help to display all commands`);
-    }
-});
-
-bot.on('polling_error', (err) => chalk.red(console.log(err)));
-
-// ///////////////////////////////////////////////////////////////////////////////////////////////
-
 const reconnectInterval = 2 * 1000;
 
 let isNewMessage = false;
 
 const allUsersWithColors = {
 };
+
+// const allChatData = [];
 
 // ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -290,6 +173,10 @@ WSCHATURL = "${response.wsChatURL}"`);
 
         const newData = JSON.parse(data).reverse();
 
+        if (TelegramBot.isChatStarting()) {
+            TelegramBot.bot.sendMessage(TelegramBot.checkUserSession(), `${new Date(newData[0].time).toLocaleDateString('en-US', timeOptions)} ${newData[0].from}: ${newData[0].message}`);
+        }
+
         if (isNewMessage && newData[0].from !== username) {
             notifier.notify({
                 title: `New message in chat: ${wsChatURL}`,
@@ -371,10 +258,10 @@ WSCHATURL = "${response.wsChatURL}"`);
             readline.moveCursor(process.stdout, 0, -1);
         };
         const onCancel = (prompt) => {
-            if (whoAmI !== undefined) {
-                bot.sendMessage(whoAmI, 'Server crashed. This session is end.');
+            if (TelegramBot.checkUserSession()) {
+                TelegramBot.bot.sendMessage(TelegramBot.checkUserSession(), 'Server crashed. This session is end.');
             }
-            bot.stopPolling();
+            TelegramBot.bot.stopPolling();
 
             readline.moveCursor(process.stdout, 0, -1);
             console.log(`         --------------------------------------------------------------------------------------------
@@ -396,3 +283,5 @@ WSCHATURL = "${response.wsChatURL}"`);
 }
 
 connect();
+
+module.exports = ws;
