@@ -75,9 +75,9 @@ async function authorization() {
         return;
     }
 
-    const writeStream = fs.createWriteStream(path.join(__dirname, './settings.config'), { encoding: 'utf8' });
+    const writeStream = fs.createWriteStream(path.join(__dirname, '../../settings/settings.config'), { encoding: 'utf8' });
 
-    writeStream.write(`USERNAME = "${response.username}";
+    writeStream.write(`USERNAME = "${response.username}"
 WSCHATURL = "${response.wsChatURL}"`);
 
     return {

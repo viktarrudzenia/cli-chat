@@ -34,7 +34,7 @@ const reconnectInterval = 2 * 1000;
 let username;
 let wsChatURL;
 
-const settings = fs.readFileSync('settings.config', { flag: 'as+' }, { encoding: 'utf-8' });
+const settings = fs.readFileSync(path.join(__dirname, '/settings/settings.config'), { flag: 'as+' }, { encoding: 'utf-8' });
 const regExpUsername = /(?<=USERNAME = ")[^"]+/;
 const regExpWsChatURL = /(?<=WSCHATURL = ")[^"]+/;
 
