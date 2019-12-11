@@ -283,5 +283,3 @@ WSCHATURL = "${response.wsChatURL}"`);
 }
 
 connect();
-
-module.exports = ws;
