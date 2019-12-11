@@ -32,7 +32,7 @@ const timeOptions = {
 };
 
 let isStartChatting = false;
-let whoAmI;
+let userChatId;
 
 bot.onText(/\/happy/, (msg) => {
     const chatId = msg.chat.id;
@@ -95,9 +95,10 @@ bot.onText(/\/send (.+)/, (msg, match) => {
 bot.onText(/\/help/, (msg) => {
     const chatId = msg.chat.id;
     bot.sendMessage(chatId, `Use this commands:
+    /help - Use to display all available commands
     /startchat - for start chatting in ws chat
     /stopchat - for stop chatting in ws chat
-    /send ******* - for send something in ws chat from bot
+    /send any_text - Bot sends any_text to ws chat
     /love - bot sends you a love emoji
     /happy - bot sends you a happySmile emoji`);
 });
@@ -111,7 +112,7 @@ bot.on('message', (msg) => {
     const chatUsername = msg.chat.username;
     const chatDate = +`${msg.date}000`;
     const chatText = msg.text;
-    whoAmI = msg.chat.id;
+    userChatId = msg.chat.id;
 
     if (isStartChatting && chatText !== '/stopchat') {
         const ws = new WebSocket('ws://chat.shas.tel');
@@ -137,7 +138,7 @@ Use /help to display all commands`);
 bot.on('polling_error', (err) => console.log(err));
 
 function checkUserSession() {
-    return whoAmI === undefined ? false : whoAmI;
+    return userChatId === undefined ? false : userChatId;
 }
 
 function isChatStarting() {
