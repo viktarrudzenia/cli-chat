@@ -28,6 +28,7 @@ const timeOptions = {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
+    hour12: false,
 };
 
 let isStartChatting = false;
@@ -79,6 +80,15 @@ bot.onText(/\/send (.+)/, (msg, match) => {
     const chatDate = +`${msg.date}000`;
     const chatText = match[1];
 
+    const ws = new WebSocket('ws://chat.shas.tel');
+    ws.on('open', () => {
+        const msg = {
+            from: chatUsername,
+            message: chatText,
+        };
+        ws.send(JSON.stringify(msg));
+        ws.close();
+    });
     bot.sendMessage(chatId, `${new Date(chatDate).toLocaleDateString('en-US', timeOptions)} ${chatUsername}: ${chatText}`);
 });
 
@@ -111,6 +121,7 @@ bot.on('message', (msg) => {
                 message: chatText,
             };
             ws.send(JSON.stringify(msg));
+            ws.close();
         });
 
         // bot.sendMessage(chatId, `${new Date(chatDate).toLocaleDateString('en-US', timeOptions)} ${chatUsername}: ${chatText}`);
