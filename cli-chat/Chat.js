@@ -12,10 +12,9 @@ const { username, wsChatURL } = settings;
 (async () => {
     if (!auth.checkIsAuthorized(username, wsChatURL)) {
         const data = await auth.authorization();
-        data === undefined
+        return data === undefined
             ? console.log(`${chalk.red('You have interrupted chat settings. Disconnected')}`)
             : connect(data.username, data.wsChatURL, reconnectInterval);
-    } else {
-        connect(username, wsChatURL, reconnectInterval);
     }
+    connect(username, wsChatURL, reconnectInterval);
 })();

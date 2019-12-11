@@ -56,17 +56,13 @@ async function connect(username, wsChatURL, reconnectInterval) {
         for (let i = 0; i < newData.length; i += 1) {
             logToHistory(newData[i]);
             if (newData[i].from === username) {
-                // allChatData.push(`${new Date(newData[i].time).toLocaleDateString('en-US', timeOptions)} ${(newData[i].from)}: ${(newData[i].message)}`);
                 console.log(`${chalk.blue(new Date(newData[i].time).toLocaleDateString('en-US', timeOptions))} ${chalk.bold.bgGreen.keyword('black')(newData[i].from)}: ${chalk.bgGreen.keyword('black')(newData[i].message)}`);
             } else if (allUsersWithColors[newData[i].from] !== undefined) {
-                // allChatData.push(`${new Date(newData[i].time).toLocaleDateString('en-US', timeOptions)} ${(newData[i].from)}: ${(newData[i].message)}`);
                 console.log(`${chalk.blue(new Date(newData[i].time).toLocaleDateString('en-US', timeOptions))} ${chalk.bold.rgb(...allUsersWithColors[newData[i].from])(newData[i].from)}: ${chalk.bold.rgb(...allUsersWithColors[newData[i].from])(newData[i].message)}`);
             } else {
-                // allChatData.push(`${new Date(newData[i].time).toLocaleDateString('en-US', timeOptions)} ${(newData[i].from)}: ${(newData[i].message)}`);
                 allUsersWithColors[newData[i].from] = generateRGBColor();
                 console.log(`${chalk.blue(new Date(newData[i].time).toLocaleDateString('en-US', timeOptions))} ${chalk.bold.rgb(...allUsersWithColors[newData[i].from])(newData[i].from)}: ${chalk.bold.rgb(...allUsersWithColors[newData[i].from])(newData[i].message)}`);
             }
-            // bot.sendMessage(whoAmI, `${new Date(newData[i].time).toLocaleDateString('en-US', timeOptions)} ${(newData[i].from)}: ${(newData[i].message)}`);
         }
         isNewMessage = true;
     });
