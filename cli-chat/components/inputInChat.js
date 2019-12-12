@@ -34,13 +34,14 @@ async function inputInChat(username, ws, wsChatURL, botWithHandlers) {
             readline.moveCursor(process.stdout, 0, -1);
             readline.moveCursor(process.stdout, 0, -1);
         };
-        const onCancel = (prompt) => {
+        // eslint-disable-next-line no-loop-func
+        const onCancel = () => {
             stopSessionForActiveTelegramUser(botWithHandlers);
 
             readline.moveCursor(process.stdout, 0, -1);
             console.log(`         --------------------------------------------------------------------------------------------
             You exit from the chat ${chalk.green(wsChatURL)}. Goodbye ${chalk.green(username)}.
-     --------------------------------------------------------------------------------------------`);
+         --------------------------------------------------------------------------------------------`);
 
             isActiveInputInChat = false;
             ws.close(1000, 'I\'m leaving this chat');

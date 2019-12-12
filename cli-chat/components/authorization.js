@@ -45,8 +45,6 @@ async function authorization() {
         return;
     }
 
-    // ///////////////////////////////////////////////////////////////////////////////////////////
-
     const questions = [
         {
             type: 'text',
@@ -155,7 +153,7 @@ async function authorization() {
     ];
 
     const onSubmit = (prompt, answer) => console.log(`Got it. your ${chalk.red(prompt.name)} now is: ${chalk.green(answer)}`);
-    onCancel = (prompt) => {
+    onCancel = () => {
         console.log(`    --------------------------------------------------------------------------------------------
                     You avoid chat settings. Now you wil be disconnected...
     --------------------------------------------------------------------------------------------`);
@@ -188,6 +186,7 @@ MY_COLOR = "${response.myColor}"
         myColor: response.myColor,
     };
 }
+
 module.exports = {
     authorization,
     checkIsAuthorized,

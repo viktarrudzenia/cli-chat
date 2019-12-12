@@ -29,13 +29,13 @@ function getSettings() {
     || regExpOtherUsersColor.exec(fileWithSettings) !== null
     || regExpMyColor.exec(fileWithSettings) !== null
     ) {
-        username = regExpUsername.exec(fileWithSettings)[0];
-        wsChatURL = regExpWsChatURL.exec(fileWithSettings)[0];
-        messagesToDisplayAtStart = regExpMessagesToDisplayAtStart.exec(fileWithSettings)[0];
-        reconnectInterval = regExpReconnectInterval.exec(fileWithSettings)[0];
-        dateColor = regExpDateColor.exec(fileWithSettings)[0];
-        otherUsersColor = regExpOtherUsersColor.exec(fileWithSettings)[0];
-        myColor = regExpMyColor.exec(fileWithSettings)[0];
+        [username] = regExpUsername.exec(fileWithSettings);
+        [wsChatURL] = regExpWsChatURL.exec(fileWithSettings);
+        [messagesToDisplayAtStart] = regExpMessagesToDisplayAtStart.exec(fileWithSettings);
+        [reconnectInterval] = regExpReconnectInterval.exec(fileWithSettings);
+        [dateColor] = regExpDateColor.exec(fileWithSettings);
+        [otherUsersColor] = regExpOtherUsersColor.exec(fileWithSettings);
+        [myColor] = regExpMyColor.exec(fileWithSettings);
     } else {
         console.log(chalk.red(`You do not have settings for chat, now you need to answer a couple of questions
                     Press enter when you are ready `));

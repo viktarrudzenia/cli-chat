@@ -9,8 +9,6 @@ if (envConfigs.error) {
     throw envConfigs.error;
 }
 
-// To send message to bot: https://t.me/Cli_Chat_for_ST2019_bot
-
 const token = process.env.TOKEN;
 const options = {
     polling: {
@@ -53,29 +51,19 @@ function hangAllHandlers(bot, wsChatURL) {
     bot.onText(/\/startchat/, (msg) => {
         const chatId = msg.chat.id;
         const chatUsername = msg.chat.username;
-        const chatDate = +`${msg.date}000`;
-        const chatText = msg.text;
 
         isStartChatting = true;
 
         bot.sendMessage(chatId, `Welcome home ${chatUsername}. You connected to the chat: ${wsChatURL}`);
-
-        // bot.sendMessage(chatId, JSON.stringify(msg));
     });
 
     bot.onText(/\/stopchat/, (msg) => {
         const chatId = msg.chat.id;
         const chatUsername = msg.chat.username;
-        const chatDate = +`${msg.date}000`;
-        const chatText = msg.text;
 
         isStartChatting = false;
 
         bot.sendMessage(chatId, `You exit from the chat: ${wsChatURL}. Goodbye ${chatUsername}`);
-
-        // bot.sendMessage(chatId, `${new Date(chatDate).toLocaleDateString('en-US', timeOptions)} ${chatUsername}: ${chatText}
-        // You stop chatting in chat "ws://chat.shas.tel"
-        // `);
     });
 
     bot.onText(/\/send (.+)/, (msg, match) => {
@@ -114,7 +102,6 @@ function hangAllHandlers(bot, wsChatURL) {
         }
         const chatId = msg.chat.id;
         const chatUsername = msg.chat.username;
-        const chatDate = +`${msg.date}000`;
         const chatText = msg.text;
         userChatId = msg.chat.id;
 
@@ -155,7 +142,6 @@ function checkUserSession() {
 function isChatStarting() {
     return isStartChatting !== false;
 }
-// ///////////////////////////////////////////////////////////////////////////////////////////////
 
 module.exports = {
     createTelegramBot,

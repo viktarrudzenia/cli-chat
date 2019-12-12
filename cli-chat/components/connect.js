@@ -1,6 +1,5 @@
 const WebSocket = require('ws');
 const chalk = require('chalk');
-const prompts = require('prompts');
 const readline = require('readline');
 const notifier = require('node-notifier');
 const TelegramBot = require('./telegramBot');
