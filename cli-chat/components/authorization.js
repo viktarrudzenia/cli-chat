@@ -104,7 +104,7 @@ async function authorization() {
             name: 'dateColor',
             message: 'Pick a color for a Date',
             choices: [
-                { title: 'My recommended preference', value: 'blue' },
+                { title: 'Recommended preference', description: 'different color for each user', value: 'blue' },
                 { title: 'Blue', value: 'blue' },
                 { title: 'Green', value: 'green' },
                 { title: 'Red', value: 'red' },
@@ -121,7 +121,7 @@ async function authorization() {
             name: 'otherUsersColor',
             message: 'Pick a color for other users',
             choices: [
-                { title: 'My recommended preference', value: 'different color for each user' },
+                { title: 'Recommended preference', description: 'different color for each user', value: 'different color for each user' },
                 { title: 'Blue', value: 'blue' },
                 { title: 'Green', value: 'green' },
                 { title: 'Red', value: 'red' },
@@ -138,7 +138,7 @@ async function authorization() {
             name: 'myColor',
             message: 'Pick a color for you',
             choices: [
-                { title: 'My recommended preference', value: 'black' },
+                { title: 'Recommended preference', description: 'black', value: 'black' },
                 { title: 'Blue', value: 'blue' },
                 { title: 'Green', value: 'green' },
                 { title: 'Red', value: 'red' },
