@@ -3,8 +3,9 @@
 ## RUN PROJECT
 
 1. Just ```git clone``` my repository or download ```.zip``` file
-2. Open /cli-chat/ directory, then run ```npm i```
-3. Run ```npm run start```
+2. In /cli-chat/.env paste your telegram TOKEN
+3. Open /cli-chat/ directory, then run ```npm i```
+4. Run ```npm run start```
 
 ## SETTINGS
 
