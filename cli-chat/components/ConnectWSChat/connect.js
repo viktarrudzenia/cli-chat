@@ -11,6 +11,14 @@ const allUsersWithColors = {
 
 let isNewMessage = false;
 
+function stopSessionForActiveTelegramUser(bot) {
+    if (TelegramBot.checkUserSession()) {
+        bot.sendMessage(TelegramBot.checkUserSession(), 'Server crashed. This session is end.');
+        TelegramBot.clearUserChatId();
+    }
+    bot.stopPolling();
+}
+
 async function connect(username, wsChatURL, reconnectInterval) {
     try {
         const ws = await new WebSocket(wsChatURL);
@@ -74,14 +82,18 @@ async function connect(username, wsChatURL, reconnectInterval) {
         });
 
         ws.on('error', (error) => {
+            stopSessionForActiveTelegramUser(botWithHandlers);
+
             console.error('Error: ', error);
             console.log(`         --------------------------------------------------------------------------------------------
                 Trying to reconnect to chat ${chalk.green(wsChatURL)}... with ${chalk.green(reconnectInterval / 1000)}s interval
          --------------------------------------------------------------------------------------------`);
-            setTimeout(connect, reconnectInterval, username, wsChatURL);
+            setTimeout(connect, reconnectInterval, username, wsChatURL, reconnectInterval);
         });
 
         ws.on('close', (code, reason) => {
+            stopSessionForActiveTelegramUser(botWithHandlers);
+
             console.log(`         --------------------------------------------------------------------------------------------
             Server: You disconnected from the chat ${chalk.green(wsChatURL)} with ${chalk.red(code)} code and this reason: '${chalk.red(reason)}'
          --------------------------------------------------------------------------------------------`);
@@ -89,7 +101,7 @@ async function connect(username, wsChatURL, reconnectInterval) {
                 console.log(`         --------------------------------------------------------------------------------------------
                 Trying to reconnect to chat ${chalk.green(wsChatURL)}... with ${chalk.green(reconnectInterval / 1000)}s interval
          --------------------------------------------------------------------------------------------`);
-                setTimeout(connect, reconnectInterval, username, wsChatURL);
+                setTimeout(connect, reconnectInterval, username, wsChatURL, reconnectInterval);
             }
         });
 
@@ -108,9 +120,9 @@ async function connect(username, wsChatURL, reconnectInterval) {
                     if (value.length >= 1024) {
                         return 'Length of your message should be less than 1024 symbols';
                     }
-                    if (value.trim() === '') {
-                        return 'Input correct message please, only spaces are not allowed';
-                    }
+                    // if (value.trim() === '') {
+                    //     return 'Input correct message please, only spaces are not allowed';
+                    // }
                     return true;
                 },
                 format: (value) => value.trim(),
@@ -122,10 +134,7 @@ async function connect(username, wsChatURL, reconnectInterval) {
                 readline.moveCursor(process.stdout, 0, -1);
             };
             const onCancel = (prompt) => {
-                if (TelegramBot.checkUserSession()) {
-                    botWithHandlers.sendMessage(TelegramBot.checkUserSession(), 'Server crashed. This session is end.');
-                }
-                botWithHandlers.stopPolling();
+                stopSessionForActiveTelegramUser(botWithHandlers);
 
                 readline.moveCursor(process.stdout, 0, -1);
                 console.log(`         --------------------------------------------------------------------------------------------
