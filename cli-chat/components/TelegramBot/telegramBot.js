@@ -9,7 +9,6 @@ if (envConfigs.error) {
     throw envConfigs.error;
 }
 
-
 // To send message to bot: https://t.me/Cli_Chat_for_ST2019_bot
 
 const token = process.env.TOKEN;
@@ -38,7 +37,7 @@ function createTelegramBot() {
     return new TelegramBot(token, options);
 }
 
-function hangAllHandlers(bot) {
+function hangAllHandlers(bot, wsChatURL) {
     bot.onText(/\/happy/, (msg) => {
         const chatId = msg.chat.id;
         const happySmile = '😃';
@@ -59,7 +58,7 @@ function hangAllHandlers(bot) {
 
         isStartChatting = true;
 
-        bot.sendMessage(chatId, `Welcome home ${chatUsername}. You connected to the chat: ws://chat.shas.tel`);
+        bot.sendMessage(chatId, `Welcome home ${chatUsername}. You connected to the chat: ${wsChatURL}`);
 
         // bot.sendMessage(chatId, JSON.stringify(msg));
     });
@@ -72,7 +71,7 @@ function hangAllHandlers(bot) {
 
         isStartChatting = false;
 
-        bot.sendMessage(chatId, `You exit from the chat: ws://chat.shas.tel. Goodbye ${chatUsername}`);
+        bot.sendMessage(chatId, `You exit from the chat: ${wsChatURL}. Goodbye ${chatUsername}`);
 
         // bot.sendMessage(chatId, `${new Date(chatDate).toLocaleDateString('en-US', timeOptions)} ${chatUsername}: ${chatText}
         // You stop chatting in chat "ws://chat.shas.tel"
@@ -85,7 +84,7 @@ function hangAllHandlers(bot) {
         const chatDate = +`${msg.date}000`;
         const chatText = match[1];
 
-        const ws = new WebSocket('ws://chat.shas.tel');
+        const ws = new WebSocket(wsChatURL);
         ws.on('open', () => {
             const msg = {
                 from: chatUsername,
@@ -120,7 +119,7 @@ function hangAllHandlers(bot) {
         userChatId = msg.chat.id;
 
         if (isStartChatting && chatText !== '/stopchat') {
-            const ws = new WebSocket('ws://chat.shas.tel');
+            const ws = new WebSocket(wsChatURL);
             ws.on('open', () => {
                 const msg = {
                     from: chatUsername,

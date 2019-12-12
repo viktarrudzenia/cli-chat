@@ -11,7 +11,7 @@ const allUsersWithColors = {
 
 let isNewMessage = false;
 
-function stopSessionForActiveTelegramUser(bot) {
+function stopSessionForActiveTelegramUser(bot, wsChatURL) {
     if (TelegramBot.checkUserSession()) {
         bot.sendMessage(TelegramBot.checkUserSession(), 'Server crashed. This session is end.');
         TelegramBot.clearUserChatId();
@@ -23,11 +23,14 @@ async function connect(username, wsChatURL, messagesToDisplayAtStart, reconnectI
     try {
         const ws = await new WebSocket(wsChatURL);
         const bot = TelegramBot.createTelegramBot();
-        const botWithHandlers = TelegramBot.hangAllHandlers(bot);
+        const botWithHandlers = TelegramBot.hangAllHandlers(bot, wsChatURL);
 
         ws.on('open', () => {
             console.log(`    --------------------------------------------------------------------------------------------
                 Welcome home ${chalk.green(username)}. You connected to the chat ${chalk.green(wsChatURL)}
+         --------------------------------------------------------------------------------------------
+         --------------------------------------------------------------------------------------------
+        To start chatting via TelegramBot use this telegram link: ${chalk.green('https://t.me/Cli_Chat_for_ST2019_bot')}
          --------------------------------------------------------------------------------------------`);
         });
 
@@ -84,7 +87,7 @@ async function connect(username, wsChatURL, messagesToDisplayAtStart, reconnectI
         });
 
         ws.on('error', (error) => {
-            stopSessionForActiveTelegramUser(botWithHandlers);
+            stopSessionForActiveTelegramUser(botWithHandlers, wsChatURL);
 
             console.error('Error: ', error);
             console.log(`         --------------------------------------------------------------------------------------------
@@ -94,7 +97,7 @@ async function connect(username, wsChatURL, messagesToDisplayAtStart, reconnectI
         });
 
         ws.on('close', (code, reason) => {
-            stopSessionForActiveTelegramUser(botWithHandlers);
+            stopSessionForActiveTelegramUser(botWithHandlers, wsChatURL);
 
             console.log(`         --------------------------------------------------------------------------------------------
             Server: You disconnected from the chat ${chalk.green(wsChatURL)} with ${chalk.red(code)} code and this reason: '${chalk.red(reason)}'
@@ -136,7 +139,7 @@ async function connect(username, wsChatURL, messagesToDisplayAtStart, reconnectI
                 readline.moveCursor(process.stdout, 0, -1);
             };
             const onCancel = (prompt) => {
-                stopSessionForActiveTelegramUser(botWithHandlers);
+                stopSessionForActiveTelegramUser(botWithHandlers, wsChatURL);
 
                 readline.moveCursor(process.stdout, 0, -1);
                 console.log(`         --------------------------------------------------------------------------------------------

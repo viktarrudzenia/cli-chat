@@ -76,7 +76,6 @@ async function authorization() {
             type: 'number',
             name: 'messagesToDisplayAtStart',
             message: 'Please enter how much messages to display when you connect to chat"',
-            initial: '1000',
             validate: (value) => {
                 if (value < 1) {
                     return 'Input correct amount. It should be a number > 0';
@@ -88,7 +87,6 @@ async function authorization() {
             type: 'number',
             name: 'reconnectInterval',
             message: 'Please enter number of seconds for reconnect to chat',
-            initial: '3',
             validate: (value) => {
                 if (value < 1) {
                     return 'Input correct amount. It should be a number > 0';
