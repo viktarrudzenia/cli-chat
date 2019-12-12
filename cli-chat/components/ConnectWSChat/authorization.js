@@ -3,11 +3,18 @@ const path = require('path');
 const prompts = require('prompts');
 const chalk = require('chalk');
 
-function checkIsAuthorized(username, wsChatURL, messagesToDisplayAtStart, reconnectInterval) {
+function checkIsAuthorized(settings) {
+    const {
+        username, wsChatURL, messagesToDisplayAtStart, reconnectInterval, dateColor, otherUsersColor, myColor,
+    } = settings;
+
     if (username === undefined
         || wsChatURL === undefined
         || messagesToDisplayAtStart === undefined
-        || reconnectInterval === undefined) {
+        || reconnectInterval === undefined
+        || dateColor === undefined
+        || otherUsersColor === undefined
+        || myColor === undefined) {
         return false;
     }
     return true;
@@ -32,10 +39,9 @@ async function authorization() {
         return false;
     };
 
-    const settings = await prompts(initialSetiings, { onCancel });
+    const settingsForChat = await prompts(initialSetiings, { onCancel });
 
-    if (settings.apply === undefined) {
-        // console.log(`${chalk.red('You have interrupted chat settings. Disconnected')}`);
+    if (settingsForChat.apply === undefined) {
         return;
     }
 
@@ -95,6 +101,54 @@ async function authorization() {
             },
             format: (value) => value * 1000,
         },
+        {
+            type: 'select',
+            name: 'dateColor',
+            message: 'Pick a color for a Date',
+            choices: [
+                { title: 'Blue', value: 'rgb(0, 0, 255)' },
+                { title: 'Green', value: 'rgb(0, 128, 0)' },
+                { title: 'Red', value: 'rgb(255, 0, 0)' },
+                { title: 'Cyan', value: 'rgb(0, 255, 255)' },
+                { title: 'White', value: 'rgb(255, 255, 255)' },
+                { title: 'Black', value: 'rgb(0, 0, 0)' },
+                { title: 'Yellow', value: 'rgb(255, 255, 0)' },
+                { title: 'Magenta', value: 'rgb(255, 0, 255)' },
+            ],
+            initial: 0,
+        },
+        {
+            type: 'select',
+            name: 'otherUsersColor',
+            message: 'Pick a color for other users',
+            choices: [
+                { title: 'Blue', value: 'rgb(0, 0, 255)' },
+                { title: 'Green', value: 'rgb(0, 128, 0)' },
+                { title: 'Red', value: 'rgb(255, 0, 0)' },
+                { title: 'Cyan', value: 'rgb(0, 255, 255)' },
+                { title: 'White', value: 'rgb(255, 255, 255)' },
+                { title: 'Black', value: 'rgb(0, 0, 0)' },
+                { title: 'Yellow', value: 'rgb(255, 255, 0)' },
+                { title: 'Magenta', value: 'rgb(255, 0, 255)' },
+            ],
+            initial: 0,
+        },
+        {
+            type: 'select',
+            name: 'myColor',
+            message: 'Pick a color for you',
+            choices: [
+                { title: 'Blue', value: 'rgb(0, 0, 255)' },
+                { title: 'Green', value: 'rgb(0, 128, 0)' },
+                { title: 'Red', value: 'rgb(255, 0, 0)' },
+                { title: 'Cyan', value: 'rgb(0, 255, 255)' },
+                { title: 'White', value: 'rgb(255, 255, 255)' },
+                { title: 'Black', value: 'rgb(0, 0, 0)' },
+                { title: 'Yellow', value: 'rgb(255, 255, 0)' },
+                { title: 'Magenta', value: 'rgb(255, 0, 255)' },
+            ],
+            initial: 0,
+        },
     ];
 
     const onSubmit = (prompt, answer) => console.log(`Got it. your ${chalk.red(prompt.name)} now is: ${chalk.green(answer)}`);
@@ -106,8 +160,7 @@ async function authorization() {
     };
 
     const response = await prompts(questions, { onSubmit, onCancel });
-
-    if (!checkIsAuthorized(response.username, response.wsChatURL, response.messagesToDisplayAtStart, response.reconnectInterval)) {
+    if (!checkIsAuthorized(response)) {
         return;
     }
 
@@ -117,6 +170,9 @@ async function authorization() {
 WS_CHAT_URL = "${response.wsChatURL}"
 MESSAGES_TO_DISPLAY_AT_START = "${response.messagesToDisplayAtStart}"
 RECONNECT_INTERVAL = "${response.reconnectInterval}"
+DATE_COLOR = "${response.dateColor}"
+OTHER_USERS_COLOR = "${response.otherUsersColor}"
+MY_COLOR = "${response.myColor}"
 `);
 
     return {
@@ -124,6 +180,9 @@ RECONNECT_INTERVAL = "${response.reconnectInterval}"
         wsChatURL: response.wsChatURL,
         messagesToDisplayAtStart: response.messagesToDisplayAtStart,
         reconnectInterval: response.reconnectInterval,
+        dateColor: response.dateColor,
+        otherUsersColor: response.otherUsersColor,
+        myColor: response.myColor,
     };
 }
 module.exports = {
