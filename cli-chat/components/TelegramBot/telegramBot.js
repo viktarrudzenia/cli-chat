@@ -128,9 +128,8 @@ function hangAllHandlers(bot, wsChatURL) {
                 ws.send(JSON.stringify(msg));
                 ws.close();
             });
-
-            // bot.sendMessage(chatId, `${new Date(chatDate).toLocaleDateString('en-US', timeOptions)} ${chatUsername}: ${chatText}`);
-        } else if (chatText === '/startchat' || chatText === '/stopchat' || chatText === '/help' || /^\/send /.exec(chatText) !== null) {
+        } else if (chatText === '/startchat' || chatText === '/stopchat' || chatText === '/help'
+        || /^\/send /.exec(chatText) !== null || chatText === '/love' || chatText === '/happy') {
             // eslint-disable-next-line no-useless-return
             return;
         } else {
