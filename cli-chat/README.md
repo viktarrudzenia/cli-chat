@@ -44,6 +44,13 @@ cli-chat-rudzenia-bot supports the following commands:
 - ```/love``` - Bot sends you a love emoji.
 - ```/happy``` - Bot sends you a happySmile emoji.
 
+### TelegramBot behavior explanation
+
+When you type in TelegramBot "/startchat" you become member of ws chat with your telegram username,  as confirmation to connect - you receive greeting message. After that you get all new messages and can post your own messages.
+To stop chatting in ws chat you type "/stopchat", as disconnect confirmation - you receive a goodbye message.
+Also you can send any message from bot behalf, just use "/send any_text", where "any_text" - what are you want post to ws chat from bot.
+Use "/help" in any difficult situation to get help info.
+
 ## HISTORY
 
 In /history/ logs all history for every connection in txt format: "MM-DD-YYYY HH-MM-SS.txt".
