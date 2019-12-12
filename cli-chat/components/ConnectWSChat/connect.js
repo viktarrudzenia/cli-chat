@@ -52,7 +52,10 @@ async function connect(username, wsChatURL, reconnectInterval) {
             const messagesToDisplayAtStart = 10;
             const newData = JSON.parse(data).slice(0, messagesToDisplayAtStart).reverse();
 
-            // const newData = JSON.parse(data).reverse();
+            if (newData[0] === undefined) {
+                console.log('Server now crashed. Somebody send in msg.from: false value :)');
+                return;
+            }
 
             if (TelegramBot.isChatStarting()) {
                 botWithHandlers.sendMessage(TelegramBot.checkUserSession(), `${new Date(newData[0].time).toLocaleDateString('en-US', timeOptions)} ${newData[0].from}: ${newData[0].message}`);
@@ -120,9 +123,9 @@ async function connect(username, wsChatURL, reconnectInterval) {
                     if (value.length >= 1024) {
                         return 'Length of your message should be less than 1024 symbols';
                     }
-                    // if (value.trim() === '') {
-                    //     return 'Input correct message please, only spaces are not allowed';
-                    // }
+                    if (value.trim() === '') {
+                        return 'Input correct message please, only spaces are not allowed';
+                    }
                     return true;
                 },
                 format: (value) => value.trim(),
