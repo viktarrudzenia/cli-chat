@@ -25,8 +25,10 @@ async function authorization() {
     const settings = await prompts(initialSetiings, { onCancel });
 
     if (settings.apply === undefined) {
-        return console.log(`${chalk.red('You have interrupted chat settings. Disconnected')}`);
+        // console.log(`${chalk.red('You have interrupted chat settings. Disconnected')}`);
+        return;
     }
+
     // ///////////////////////////////////////////////////////////////////////////////////////////
 
     const questions = [

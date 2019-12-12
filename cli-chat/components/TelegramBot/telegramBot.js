@@ -1,25 +1,25 @@
-const WebSocket = require('ws');
+process.env.NTBA_FIX_319 = 1;
 const TelegramBot = require('node-telegram-bot-api');
+const WebSocket = require('ws');
 const dotenv = require('dotenv');
 
-const result = dotenv.config();
+const envConfigs = dotenv.config();
 
-if (result.error) {
-    throw result.error;
+if (envConfigs.error) {
+    throw envConfigs.error;
 }
 
 
 // To send message to bot: https://t.me/Cli_Chat_for_ST2019_bot
 
 const token = process.env.TOKEN;
-const bot = new TelegramBot(token, {
+const options = {
     polling: {
         params: {
             timeout: 0,
         },
     },
-});
-
+};
 
 const timeOptions = {
     day: '2-digit',
@@ -34,87 +34,57 @@ const timeOptions = {
 let isStartChatting = false;
 let userChatId;
 
-bot.onText(/\/happy/, (msg) => {
-    const chatId = msg.chat.id;
-    const happySmile = '😃';
-    bot.sendMessage(chatId, happySmile);
-});
+function createTelegramBot() {
+    return new TelegramBot(token, options);
+}
 
-bot.onText(/\/love/, (msg) => {
-    const chatId = msg.chat.id;
-    const loveSmile = '❤';
-    bot.sendMessage(chatId, loveSmile);
-});
-
-bot.onText(/\/startchat/, (msg) => {
-    const chatId = msg.chat.id;
-    const chatUsername = msg.chat.username;
-    const chatDate = +`${msg.date}000`;
-    const chatText = msg.text;
-
-    isStartChatting = true;
-
-    bot.sendMessage(chatId, `Welcome home ${chatUsername}. You connected to the chat: ws://chat.shas.tel`);
-
-    // bot.sendMessage(chatId, JSON.stringify(msg));
-});
-
-bot.onText(/\/stopchat/, (msg) => {
-    const chatId = msg.chat.id;
-    const chatUsername = msg.chat.username;
-    const chatDate = +`${msg.date}000`;
-    const chatText = msg.text;
-
-    isStartChatting = false;
-
-    bot.sendMessage(chatId, `You exit from the chat: ws://chat.shas.tel. Goodbye ${chatUsername}`);
-
-    // bot.sendMessage(chatId, `${new Date(chatDate).toLocaleDateString('en-US', timeOptions)} ${chatUsername}: ${chatText}
-    // You stop chatting in chat "ws://chat.shas.tel"
-    // `);
-});
-
-bot.onText(/\/send (.+)/, (msg, match) => {
-    const chatId = msg.chat.id;
-    const chatUsername = 'cli-chat-rudzenia-bot';
-    const chatDate = +`${msg.date}000`;
-    const chatText = match[1];
-
-    const ws = new WebSocket('ws://chat.shas.tel');
-    ws.on('open', () => {
-        const msg = {
-            from: chatUsername,
-            message: chatText,
-        };
-        ws.send(JSON.stringify(msg));
-        ws.close();
+function hangAllHandlers(bot) {
+    bot.onText(/\/happy/, (msg) => {
+        const chatId = msg.chat.id;
+        const happySmile = '😃';
+        bot.sendMessage(chatId, happySmile);
     });
-    bot.sendMessage(chatId, `${new Date(chatDate).toLocaleDateString('en-US', timeOptions)} ${chatUsername}: ${chatText}`);
-});
 
-bot.onText(/\/help/, (msg) => {
-    const chatId = msg.chat.id;
-    bot.sendMessage(chatId, `Use this commands:
-    /help - Use to display all available commands
-    /startchat - for start chatting in ws chat
-    /stopchat - for stop chatting in ws chat
-    /send any_text - Bot sends any_text to ws chat
-    /love - bot sends you a love emoji
-    /happy - bot sends you a happySmile emoji`);
-});
+    bot.onText(/\/love/, (msg) => {
+        const chatId = msg.chat.id;
+        const loveSmile = '❤';
+        bot.sendMessage(chatId, loveSmile);
+    });
 
-// Listen for any kind of message.
-bot.on('message', (msg) => {
-    if (bot.isPolling() !== true) {
-        return;
-    }
-    const chatId = msg.chat.id;
-    const chatUsername = msg.chat.username;
-    const chatDate = +`${msg.date}000`;
-    const chatText = msg.text;
-    userChatId = msg.chat.id;
+    bot.onText(/\/startchat/, (msg) => {
+        const chatId = msg.chat.id;
+        const chatUsername = msg.chat.username;
+        const chatDate = +`${msg.date}000`;
+        const chatText = msg.text;
 
-    if (isStartChatting && chatText !== '/stopchat') {
+        isStartChatting = true;
+
+        bot.sendMessage(chatId, `Welcome home ${chatUsername}. You connected to the chat: ws://chat.shas.tel`);
+
+        // bot.sendMessage(chatId, JSON.stringify(msg));
+    });
+
+    bot.onText(/\/stopchat/, (msg) => {
+        const chatId = msg.chat.id;
+        const chatUsername = msg.chat.username;
+        const chatDate = +`${msg.date}000`;
+        const chatText = msg.text;
+
+        isStartChatting = false;
+
+        bot.sendMessage(chatId, `You exit from the chat: ws://chat.shas.tel. Goodbye ${chatUsername}`);
+
+        // bot.sendMessage(chatId, `${new Date(chatDate).toLocaleDateString('en-US', timeOptions)} ${chatUsername}: ${chatText}
+        // You stop chatting in chat "ws://chat.shas.tel"
+        // `);
+    });
+
+    bot.onText(/\/send (.+)/, (msg, match) => {
+        const chatId = msg.chat.id;
+        const chatUsername = 'cli-chat-rudzenia-bot';
+        const chatDate = +`${msg.date}000`;
+        const chatText = match[1];
+
         const ws = new WebSocket('ws://chat.shas.tel');
         ws.on('open', () => {
             const msg = {
@@ -124,18 +94,56 @@ bot.on('message', (msg) => {
             ws.send(JSON.stringify(msg));
             ws.close();
         });
+        bot.sendMessage(chatId, `${new Date(chatDate).toLocaleDateString('en-US', timeOptions)} ${chatUsername}: ${chatText}`);
+    });
 
-        // bot.sendMessage(chatId, `${new Date(chatDate).toLocaleDateString('en-US', timeOptions)} ${chatUsername}: ${chatText}`);
-    } else if (chatText === '/startchat' || chatText === '/stopchat' || chatText === '/help' || /^\/send /.exec(chatText) !== null) {
-        // eslint-disable-next-line no-useless-return
-        return;
-    } else {
-        bot.sendMessage(chatId, `Unknown command: "${chatText}".
-Use /help to display all commands`);
-    }
-});
+    bot.onText(/\/help/, (msg) => {
+        const chatId = msg.chat.id;
+        bot.sendMessage(chatId, `Use this commands:
+        /help - Use to display all available commands
+        /startchat - for start chatting in ws chat
+        /stopchat - for stop chatting in ws chat
+        /send any_text - Bot sends any_text to ws chat
+        /love - bot sends you a love emoji
+        /happy - bot sends you a happySmile emoji`);
+    });
 
-bot.on('polling_error', (err) => console.log(err));
+    // Listen for any kind of message.
+    bot.on('message', (msg) => {
+        if (bot.isPolling() !== true) {
+            return;
+        }
+        const chatId = msg.chat.id;
+        const chatUsername = msg.chat.username;
+        const chatDate = +`${msg.date}000`;
+        const chatText = msg.text;
+        userChatId = msg.chat.id;
+
+        if (isStartChatting && chatText !== '/stopchat') {
+            const ws = new WebSocket('ws://chat.shas.tel');
+            ws.on('open', () => {
+                const msg = {
+                    from: chatUsername,
+                    message: chatText,
+                };
+                ws.send(JSON.stringify(msg));
+                ws.close();
+            });
+
+            // bot.sendMessage(chatId, `${new Date(chatDate).toLocaleDateString('en-US', timeOptions)} ${chatUsername}: ${chatText}`);
+        } else if (chatText === '/startchat' || chatText === '/stopchat' || chatText === '/help' || /^\/send /.exec(chatText) !== null) {
+            // eslint-disable-next-line no-useless-return
+            return;
+        } else {
+            bot.sendMessage(chatId, `Unknown command: "${chatText}".
+    Use /help to display all commands`);
+        }
+    });
+
+    bot.on('polling_error', (err) => console.log(err));
+
+    return bot;
+}
 
 function checkUserSession() {
     return userChatId === undefined ? false : userChatId;
@@ -147,7 +155,8 @@ function isChatStarting() {
 // ///////////////////////////////////////////////////////////////////////////////////////////////
 
 module.exports = {
-    bot,
+    createTelegramBot,
+    hangAllHandlers,
     checkUserSession,
     isChatStarting,
 };
