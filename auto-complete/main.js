@@ -104,4 +104,4 @@ const createAutoComplete = function(data) {
     }
 };
 
-module.exports = { createAutoComplete };
+export default createAutoComplete;
