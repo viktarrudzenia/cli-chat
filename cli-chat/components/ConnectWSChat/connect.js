@@ -75,15 +75,23 @@ async function connect(settings) {
             console.log('');
             readline.moveCursor(process.stdout, 0, -1);
         }
+
         for (let i = 0; i < newData.length; i += 1) {
             logToHistory(newData[i]);
-            if (newData[i].from === username) {
-                console.log(`${chalk.blue(new Date(newData[i].time).toLocaleDateString('en-US', timeOptions))} ${chalk.bold.bgGreen.keyword('black')(newData[i].from)}: ${chalk.bgGreen.keyword('black')(newData[i].message)}`);
+            if (otherUsersColor === 'different color for each user') {
+                if (newData[i].from === username) {
+                    console.log(`${chalk.keyword(dateColor)(new Date(newData[i].time).toLocaleDateString('en-US', timeOptions))} ${chalk.bold.bgGreen.keyword(myColor)(newData[i].from)}: ${chalk.bgGreen.keyword(myColor)(newData[i].message)}`);
+                } else if (allUsersWithColors[newData[i].from] !== undefined) {
+                    console.log(`${chalk.keyword(dateColor)(new Date(newData[i].time).toLocaleDateString('en-US', timeOptions))} ${chalk.bold.rgb(...allUsersWithColors[newData[i].from])(newData[i].from)}: ${chalk.bold.rgb(...allUsersWithColors[newData[i].from])(newData[i].message)}`);
+                } else {
+                    allUsersWithColors[newData[i].from] = generateRGBColor();
+                    console.log(`${chalk.keyword(dateColor)(new Date(newData[i].time).toLocaleDateString('en-US', timeOptions))} ${chalk.bold.rgb(...allUsersWithColors[newData[i].from])(newData[i].from)}: ${chalk.bold.rgb(...allUsersWithColors[newData[i].from])(newData[i].message)}`);
+                }
+            } else if (newData[i].from === username) {
+                console.log(`${chalk.keyword(dateColor)(new Date(newData[i].time).toLocaleDateString('en-US', timeOptions))} ${chalk.bold.bgGreen.keyword(myColor)(newData[i].from)}: ${chalk.bgGreen.keyword(myColor)(newData[i].message)}`);
             } else if (allUsersWithColors[newData[i].from] !== undefined) {
-                console.log(`${chalk.blue(new Date(newData[i].time).toLocaleDateString('en-US', timeOptions))} ${chalk.bold.rgb(...allUsersWithColors[newData[i].from])(newData[i].from)}: ${chalk.bold.rgb(...allUsersWithColors[newData[i].from])(newData[i].message)}`);
             } else {
-                allUsersWithColors[newData[i].from] = generateRGBColor();
-                console.log(`${chalk.blue(new Date(newData[i].time).toLocaleDateString('en-US', timeOptions))} ${chalk.bold.rgb(...allUsersWithColors[newData[i].from])(newData[i].from)}: ${chalk.bold.rgb(...allUsersWithColors[newData[i].from])(newData[i].message)}`);
+                console.log(`${chalk.keyword(dateColor)(new Date(newData[i].time).toLocaleDateString('en-US', timeOptions))} ${chalk.keyword(otherUsersColor)(newData[i].from)}: ${chalk.keyword(otherUsersColor)(newData[i].message)}`);
             }
         }
         isNewMessage = true;
