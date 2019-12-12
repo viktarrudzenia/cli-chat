@@ -144,7 +144,8 @@ function hangAllHandlers(bot, wsChatURL) {
     return bot;
 }
 
-function clearUserChatId() {
+function clearUserChatIdAndSession() {
+    isStartChatting = false;
     userChatId = undefined;
 }
 
@@ -160,7 +161,7 @@ function isChatStarting() {
 module.exports = {
     createTelegramBot,
     hangAllHandlers,
-    clearUserChatId,
+    clearUserChatIdAndSession,
     checkUserSession,
     isChatStarting,
 };

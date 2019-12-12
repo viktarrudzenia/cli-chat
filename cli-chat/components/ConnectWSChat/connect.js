@@ -11,10 +11,10 @@ const allUsersWithColors = {
 
 let isNewMessage = false;
 
-function stopSessionForActiveTelegramUser(bot, wsChatURL) {
+function stopSessionForActiveTelegramUser(bot) {
     if (TelegramBot.checkUserSession()) {
         bot.sendMessage(TelegramBot.checkUserSession(), 'Server crashed. This session is end.');
-        TelegramBot.clearUserChatId();
+        TelegramBot.clearUserChatIdAndSession();
     }
     bot.stopPolling();
 }
@@ -87,7 +87,7 @@ async function connect(username, wsChatURL, messagesToDisplayAtStart, reconnectI
         });
 
         ws.on('error', (error) => {
-            stopSessionForActiveTelegramUser(botWithHandlers, wsChatURL);
+            stopSessionForActiveTelegramUser(botWithHandlers);
 
             console.error('Error: ', error);
             console.log(`         --------------------------------------------------------------------------------------------
@@ -97,7 +97,7 @@ async function connect(username, wsChatURL, messagesToDisplayAtStart, reconnectI
         });
 
         ws.on('close', (code, reason) => {
-            stopSessionForActiveTelegramUser(botWithHandlers, wsChatURL);
+            stopSessionForActiveTelegramUser(botWithHandlers);
 
             console.log(`         --------------------------------------------------------------------------------------------
             Server: You disconnected from the chat ${chalk.green(wsChatURL)} with ${chalk.red(code)} code and this reason: '${chalk.red(reason)}'
@@ -139,7 +139,7 @@ async function connect(username, wsChatURL, messagesToDisplayAtStart, reconnectI
                 readline.moveCursor(process.stdout, 0, -1);
             };
             const onCancel = (prompt) => {
-                stopSessionForActiveTelegramUser(botWithHandlers, wsChatURL);
+                stopSessionForActiveTelegramUser(botWithHandlers);
 
                 readline.moveCursor(process.stdout, 0, -1);
                 console.log(`         --------------------------------------------------------------------------------------------

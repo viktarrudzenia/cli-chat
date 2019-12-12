@@ -93,6 +93,7 @@ async function authorization() {
                 }
                 return true;
             },
+            format: (value) => value * 1000,
         },
     ];
 
