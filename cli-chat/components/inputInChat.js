@@ -5,7 +5,8 @@ const stopSessionForActiveTelegramUser = require('./stopSessionForActiveTelegram
 
 
 async function inputInChat(username, ws, wsChatURL, botWithHandlers) {
-    for (let i = 0; i < 10e8; i += 1) {
+    let isActiveInputInChat = true;
+    while (isActiveInputInChat) {
         if (ws.readyState > 1) {
             return;
         }
@@ -40,7 +41,8 @@ async function inputInChat(username, ws, wsChatURL, botWithHandlers) {
             console.log(`         --------------------------------------------------------------------------------------------
             You exit from the chat ${chalk.green(wsChatURL)}. Goodbye ${chalk.green(username)}.
      --------------------------------------------------------------------------------------------`);
-            i = Infinity;
+
+            isActiveInputInChat = false;
             ws.close(1000, 'I\'m leaving this chat');
 
             return false;
