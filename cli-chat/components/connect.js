@@ -6,19 +6,13 @@ const notifier = require('node-notifier');
 const TelegramBot = require('./telegramBot');
 const logToHistory = require('./history');
 const generateRGBColor = require('./generateRGBColor');
+const inputInChat = require('./inputInChat');
+const stopSessionForActiveTelegramUser = require('./stopSessionForActiveTelegramUser');
 
 const allUsersWithColors = {
 };
 
 let isNewMessage = false;
-
-function stopSessionForActiveTelegramUser(bot) {
-    if (TelegramBot.checkUserSession()) {
-        bot.sendMessage(TelegramBot.checkUserSession(), 'Server crashed. This session is end.');
-        TelegramBot.clearUserChatIdAndSession();
-    }
-    bot.stopPolling();
-}
 
 async function connect(settings) {
     const {
@@ -83,7 +77,6 @@ async function connect(settings) {
                 }
             } else if (newData[i].from === username) {
                 console.log(`${chalk.keyword(dateColor)(new Date(newData[i].time).toLocaleDateString('en-US', timeOptions))} ${chalk.bold.bgGreen.keyword(myColor)(newData[i].from)}: ${chalk.bgGreen.keyword(myColor)(newData[i].message)}`);
-            } else if (allUsersWithColors[newData[i].from] !== undefined) {
             } else {
                 console.log(`${chalk.keyword(dateColor)(new Date(newData[i].time).toLocaleDateString('en-US', timeOptions))} ${chalk.keyword(otherUsersColor)(newData[i].from)}: ${chalk.keyword(otherUsersColor)(newData[i].message)}`);
             }
@@ -115,54 +108,7 @@ async function connect(settings) {
         }
     });
 
-    for (let i = 0; i < 10e8; i += 1) {
-        if (ws.readyState > 1) {
-            return;
-        }
-        const questions = [{
-            type: 'text',
-            name: 'message',
-            message: '',
-            validate: (value) => {
-                if (value === '') {
-                    return 'Input something please';
-                }
-                if (value.length >= 1024) {
-                    return 'Length of your message should be less than 1024 symbols';
-                }
-                if (value.trim() === '') {
-                    return 'Input correct message please, only spaces are not allowed';
-                }
-                return true;
-            },
-            format: (value) => value.trim(),
-        }];
-
-        const onSubmit = (prompt, answer) => {
-            console.log(`You send to chat: "${chalk.green(answer)}"`);
-            readline.moveCursor(process.stdout, 0, -1);
-            readline.moveCursor(process.stdout, 0, -1);
-        };
-        const onCancel = (prompt) => {
-            stopSessionForActiveTelegramUser(botWithHandlers);
-
-            readline.moveCursor(process.stdout, 0, -1);
-            console.log(`         --------------------------------------------------------------------------------------------
-                You exit from the chat ${chalk.green(wsChatURL)}. Goodbye ${chalk.green(username)}.
-         --------------------------------------------------------------------------------------------`);
-            i = Infinity;
-            ws.close(1000, 'I\'m leaving this chat');
-
-            return false;
-        };
-        const response2 = await prompts(questions, { onSubmit, onCancel });
-
-        const msg = {
-            from: username,
-            message: response2.message,
-        };
-        ws.send(JSON.stringify(msg));
-    }
+    inputInChat(username, ws, wsChatURL, botWithHandlers);
 }
 
 module.exports = connect;
