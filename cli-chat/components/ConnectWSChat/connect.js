@@ -19,7 +19,7 @@ function stopSessionForActiveTelegramUser(bot) {
     bot.stopPolling();
 }
 
-async function connect(username, wsChatURL, reconnectInterval) {
+async function connect(username, wsChatURL, messagesToDisplayAtStart, reconnectInterval) {
     try {
         const ws = await new WebSocket(wsChatURL);
         const bot = TelegramBot.createTelegramBot();
@@ -49,7 +49,6 @@ async function connect(username, wsChatURL, reconnectInterval) {
                 return [r, g, b];
             }
 
-            const messagesToDisplayAtStart = 10;
             const newData = JSON.parse(data).slice(0, messagesToDisplayAtStart).reverse();
 
             if (newData[0] === undefined) {
@@ -91,7 +90,7 @@ async function connect(username, wsChatURL, reconnectInterval) {
             console.log(`         --------------------------------------------------------------------------------------------
                 Trying to reconnect to chat ${chalk.green(wsChatURL)}... with ${chalk.green(reconnectInterval / 1000)}s interval
          --------------------------------------------------------------------------------------------`);
-            setTimeout(connect, reconnectInterval, username, wsChatURL, reconnectInterval);
+            setTimeout(connect, reconnectInterval, username, wsChatURL, messagesToDisplayAtStart, reconnectInterval);
         });
 
         ws.on('close', (code, reason) => {
@@ -104,7 +103,7 @@ async function connect(username, wsChatURL, reconnectInterval) {
                 console.log(`         --------------------------------------------------------------------------------------------
                 Trying to reconnect to chat ${chalk.green(wsChatURL)}... with ${chalk.green(reconnectInterval / 1000)}s interval
          --------------------------------------------------------------------------------------------`);
-                setTimeout(connect, reconnectInterval, username, wsChatURL, reconnectInterval);
+                setTimeout(connect, reconnectInterval, username, wsChatURL, messagesToDisplayAtStart, reconnectInterval);
             }
         });
 

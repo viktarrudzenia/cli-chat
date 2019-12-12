@@ -4,19 +4,19 @@ const auth = require('./components/ConnectWSChat/authorization');
 const checkSettings = require('./components/ConnectWSChat/checkSettings');
 const connect = require('./components/ConnectWSChat/connect');
 
-const reconnectInterval = 2 * 1000;
-
 const settings = checkSettings();
-const { username, wsChatURL } = settings;
+const {
+    username, wsChatURL, messagesToDisplayAtStart, reconnectInterval,
+} = settings;
 
 (async () => {
-    if (!auth.checkIsAuthorized(username, wsChatURL)) {
+    if (!auth.checkIsAuthorized(username, wsChatURL, messagesToDisplayAtStart, reconnectInterval)) {
         const data = await auth.authorization();
         if (data === undefined) {
             console.log(`${chalk.red('You have interrupted chat settings. Disconnected')}`);
             return;
         }
-        connect(data.username, data.wsChatURL, reconnectInterval);
+        connect(data.username, data.wsChatURL, data.messagesToDisplayAtStart, data.reconnectInterval);
     }
-    connect(username, wsChatURL, reconnectInterval);
+    connect(username, wsChatURL, messagesToDisplayAtStart, reconnectInterval);
 })();

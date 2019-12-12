@@ -3,6 +3,16 @@ const path = require('path');
 const prompts = require('prompts');
 const chalk = require('chalk');
 
+function checkIsAuthorized(username, wsChatURL, messagesToDisplayAtStart, reconnectInterval) {
+    if (username === undefined
+        || wsChatURL === undefined
+        || messagesToDisplayAtStart === undefined
+        || reconnectInterval === undefined) {
+        return false;
+    }
+    return true;
+}
+
 async function authorization() {
     const initialSetiings = [
         {
@@ -46,7 +56,8 @@ async function authorization() {
                 return true;
             },
             format: (value) => value.trim(),
-        }, {
+        },
+        {
             type: 'text',
             name: 'wsChatURL',
             message: 'Please enter websocket link for chat or press enter if this chat "ws://chat.shas.tel"',
@@ -61,6 +72,30 @@ async function authorization() {
             },
             format: (value) => value.trim(),
         },
+        {
+            type: 'number',
+            name: 'messagesToDisplayAtStart',
+            message: 'Please enter how much messages to display when you connect to chat"',
+            initial: '1000',
+            validate: (value) => {
+                if (value < 1) {
+                    return 'Input correct amount. It should be a number > 0';
+                }
+                return true;
+            },
+        },
+        {
+            type: 'number',
+            name: 'reconnectInterval',
+            message: 'Please enter number of seconds for reconnect to chat',
+            initial: '3',
+            validate: (value) => {
+                if (value < 1) {
+                    return 'Input correct amount. It should be a number > 0';
+                }
+                return true;
+            },
+        },
     ];
 
     const onSubmit = (prompt, answer) => console.log(`Got it. your ${chalk.red(prompt.name)} now is: ${chalk.green(answer)}`);
@@ -73,26 +108,24 @@ async function authorization() {
 
     const response = await prompts(questions, { onSubmit, onCancel });
 
-    if (!checkIsAuthorized(response.username, response.wsChatURL)) {
+    if (!checkIsAuthorized(response.username, response.wsChatURL, response.messagesToDisplayAtStart, response.reconnectInterval)) {
         return;
     }
 
     const writeStream = fs.createWriteStream(path.join(__dirname, '../../settings/settings.config'), { encoding: 'utf8' });
 
     writeStream.write(`USERNAME = "${response.username}"
-WSCHATURL = "${response.wsChatURL}"`);
+WS_CHAT_URL = "${response.wsChatURL}"
+MESSAGES_TO_DISPLAY_AT_START = "${response.messagesToDisplayAtStart}"
+RECONNECT_INTERVAL = "${response.reconnectInterval}"
+`);
 
     return {
         username: response.username,
         wsChatURL: response.wsChatURL,
+        messagesToDisplayAtStart: response.messagesToDisplayAtStart,
+        reconnectInterval: response.reconnectInterval,
     };
-}
-
-function checkIsAuthorized(username, wsChatURL) {
-    if (username === undefined || wsChatURL === undefined) {
-        return false;
-    }
-    return true;
 }
 module.exports = {
     authorization,

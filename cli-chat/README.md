@@ -12,7 +12,9 @@ For autoconnect to ws chat in settings/settings.config  must store configs in th
 
 ```
 USERNAME = "your_username"
-WSCHATURL = "your_wschaturl"
+WS_CHAT_URL = "your_wschaturl"
+MESSAGES_TO_DISPLAY_AT_START = "number_of_messages"
+RECONNECT_INTERVAL = "number_of_seconds"
 ```
 
 If you do not have this "settings.config", when you run ```npm run start``` will be displayed that you do not have settings for chat and must answer a couple of questions.
