@@ -15,7 +15,7 @@ const timeOptions = {
 
 function logToHistory(data) {
     const message = `${new Date(data.time).toLocaleDateString('en-US', timeOptions)} ${data.from}: ${data.message}\n`;
-    fs.appendFileSync(path.join(__dirname, `../../history/${historyFileName}.txt`), message);
+    fs.appendFileSync(path.join(__dirname, `../history/${historyFileName}.txt`), message);
 }
 
 module.exports = logToHistory;

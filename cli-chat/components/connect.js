@@ -3,8 +3,8 @@ const chalk = require('chalk');
 const prompts = require('prompts');
 const readline = require('readline');
 const notifier = require('node-notifier');
-const TelegramBot = require('../TelegramBot/telegramBot');
-const logToHistory = require('../History/history');
+const TelegramBot = require('./telegramBot');
+const logToHistory = require('./history');
 
 function generateRGBColor() {
     const r = Math.floor(Math.random() * 256);

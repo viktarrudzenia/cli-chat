@@ -11,7 +11,7 @@ function getSettings() {
     let otherUsersColor;
     let myColor;
 
-    const fileWithSettings = fs.readFileSync(path.join(__dirname, '../../settings/settings.config'), { flag: 'as+' }, { encoding: 'utf-8' });
+    const fileWithSettings = fs.readFileSync(path.join(__dirname, '../settings/settings.config'), { flag: 'as+' }, { encoding: 'utf-8' });
     const regExpUsername = /(?<=USERNAME = ")[^"]+/;
     const regExpWsChatURL = /(?<=WS_CHAT_URL = ")[^"]+/;
     const regExpMessagesToDisplayAtStart = /(?<=MESSAGES_TO_DISPLAY_AT_START = ")[^"]+/;

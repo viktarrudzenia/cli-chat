@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 const chalk = require('chalk');
-const auth = require('./components/ConnectWSChat/authorization');
-const getSettings = require('./components/ConnectWSChat/checkSettings');
-const connect = require('./components/ConnectWSChat/connect');
+const auth = require('./components/authorization');
+const getSettings = require('./components/getSettings');
+const connect = require('./components/connect');
 
 const settings = getSettings();
 
