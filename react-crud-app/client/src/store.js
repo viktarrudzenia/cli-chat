@@ -1,24 +1,25 @@
 import { createStore, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
 import {
-	GET_DATA,
-	ADD_PEOPLE,
-	REMOVE_PEOPLE,
-	ADD_PEOPLES,
+	POST_DATA,
+	DELETE_DATA_BY_ID,
+	GET_DATA_BY_ID,
+	GET_ALL_DATA,
+	UPDATE_DATA_BY_ID,
 } from './actions';
 
 const reducer = (state = [], action) => {
 	switch (action.type) {
-		case GET_DATA:
+		case POST_DATA:
 			return [...action.payload];
-		case ADD_PEOPLE:
-			return [state, action.payload];
-		case REMOVE_PEOPLE:
-			return state.filter((i) => {
-				return i.name !== action.payload.name;
-			});
-		case ADD_PEOPLES:
+		case GET_DATA_BY_ID:
 			return [...action.payload];
+		case UPDATE_DATA_BY_ID:
+			return [...action.payload];
+		case GET_ALL_DATA:
+			return [...action.payload];
+		case DELETE_DATA_BY_ID:
+			return [...action.payload]
 		default:
 			return state;
 	}

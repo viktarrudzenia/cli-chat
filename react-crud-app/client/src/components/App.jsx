@@ -4,14 +4,14 @@ import { connect } from 'react-redux'
 import List from './List';
 import Input from './Input';
 import Header from './Header';
-import InputForDelete from './InputForDelete';
+import InputForUpdate from './InputForUpdate'
 
-import { addPeople, fetchPeople, addPeopleMongoDB, fetchDataById} from '../actions';
+import { expectDeleteByIdFromBD, expectGetAllDataFromBD, expectPostDataToBD, expectUpdateDataByIdFromBD, fetchDataById} from '../actions';
 
-function App ({ addPeople, fetchPeople, peoples , addPeopleMongoDB, fetchDataById}) {
+function App ({ expectDeleteByIdFromBD, expectGetAllDataFromBD, peoples , expectPostDataToBD, expectUpdateDataByIdFromBD, fetchDataById}) {
 	useEffect(() => {
-		fetchPeople();
-	}, [fetchPeople]);
+		expectGetAllDataFromBD();
+	}, [expectGetAllDataFromBD]);
 
 	useEffect(() => {
 		// console.log('useEffect', peoples);
@@ -19,9 +19,12 @@ function App ({ addPeople, fetchPeople, peoples , addPeopleMongoDB, fetchDataByI
 
 	return <div>
 		<Header/>
-		<Input onEnter={(data) => addPeopleMongoDB(data)}/>
-		<Input onEnter={(id) => fetchDataById(id)}/>
-		{/* <InputForDelete onEnter={(data) => addPeople(data)}/> */}
+		Post: <Input onEnter={(data) => expectPostDataToBD(data)}/>
+		GetById: <Input onEnter={(id) => fetchDataById(id)}/>
+		DeleteById: <Input onEnter={(id) => expectDeleteByIdFromBD(id)}/>
+		<div>
+		UpdateById(id, body): <InputForUpdate onEnter={(id, body) => expectUpdateDataByIdFromBD(id, body)}/>
+		</div>
 		<List values={peoples}/>
 	</div>;
 }
@@ -31,10 +34,11 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
+	expectUpdateDataByIdFromBD,
+	expectDeleteByIdFromBD,
 	fetchDataById,
-	addPeople,
-	fetchPeople,
-	addPeopleMongoDB,
+	expectGetAllDataFromBD,
+	expectPostDataToBD,
 };
 
 export default connect(

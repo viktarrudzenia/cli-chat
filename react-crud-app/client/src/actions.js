@@ -1,18 +1,14 @@
 import fetchDataByIdFromBD from './fetchDataByIdFromBD';
 import getAllDataFromBD from './getAllDataFromBD';
 import postDataToBD from './postDataToBD';
+import deleteByIdFromBD from './deleteByIdFromBD';
+import updateDataByIdFromBD from './updateDataByIdFromBD';
 
-export const GET_DATA = 'GET_DATA';
-export const ADD_PEOPLE = 'ADD_PEOPLE';
-export const REMOVE_PEOPLE = 'REMOVE_PEOPLE';
-export const ADD_PEOPLES = 'ADD_PEOPLES';
-
-export function getMyDataByID(data = []) {
-	return {
-		type: GET_DATA,
-		payload: data,
-	}
-}
+export const POST_DATA = 'POST_DATA';
+export const DELETE_DATA_BY_ID = 'DELETE_DATA_BY_ID';
+export const GET_ALL_DATA = 'GET_ALL_DATA';
+export const GET_DATA_BY_ID = 'GET_DATA_BY_ID';
+export const UPDATE_DATA_BY_ID = 'UPDATE_DATA_BY_ID';
 
 export function fetchDataById(id) {
 	return (dispatch) => {
@@ -22,18 +18,33 @@ export function fetchDataById(id) {
 	}
 }
 
-export function addPeople(peoples = {}) {
+export function getMyDataByID(data = []) {
 	return {
-		type: ADD_PEOPLE,
-		payload: {
-			"title": peoples,
-			"body": peoples,
-			"_id": peoples+1,
-		},
+		type: GET_DATA_BY_ID,
+		payload: data,
 	}
 }
 
-export function addPeopleMongoDB(title) {
+export function expectDeleteByIdFromBD(id) {
+	return (dispatch) => {
+		deleteByIdFromBD(id).then((data) => {
+			if (data === 'OK') {
+				getAllDataFromBD().then((data) => {
+					return dispatch(addAllData(data))
+				});
+			}
+		});
+	}
+}
+
+export function deleteById(id = []) {
+	return {
+		type: DELETE_DATA_BY_ID,
+		payload: id,
+	}
+}
+
+export function expectPostDataToBD(title) {
 	return (dispatch) => {
 		postDataToBD(title).then((data) => {
 			if (data === 'Created') {
@@ -45,14 +56,14 @@ export function addPeopleMongoDB(title) {
 	}
 }
 
-export function addAllData(data = []) {
+export function postData(data = []) {
 	return {
-		type: ADD_PEOPLES,
+		type: POST_DATA,
 		payload: data,
 	}
 }
- 
-export function fetchPeople() {
+
+export function expectGetAllDataFromBD() {
 	return (dispatch) => {
 		getAllDataFromBD().then((data) => {
 			return dispatch(addAllData(data))
@@ -60,9 +71,29 @@ export function fetchPeople() {
 	}
 }
 
+export function addAllData(data = []) {
+	return {
+		type: GET_ALL_DATA,
+		payload: data,
+	}
+}
 
+export function expectUpdateDataByIdFromBD(id, body) {
+	return (dispatch) => {
+		updateDataByIdFromBD(id, body).then((data) => {
+			if (data === 'OK') {
+				getAllDataFromBD().then((data) => {
+					return dispatch(addAllData(data))
+				});
+			}
+		});
+	}
+}
 
-
-
-
+export function updateDataById(id) {
+	return {
+		type: UPDATE_DATA_BY_ID,
+		payload: id,
+	}
+}
 

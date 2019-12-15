@@ -6,7 +6,7 @@ import Statistic from './Statistic';
 
 export function Header ({ peoples }) {
 	return <header>
-		<span>Peoples: {peoples.length}</span>
+		<span>Now your database have: {peoples.length} items</span>
 		<Statistic data={peoples}/>
 	</header>
 }
