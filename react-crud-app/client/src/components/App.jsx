@@ -4,21 +4,24 @@ import { connect } from 'react-redux'
 import List from './List';
 import Input from './Input';
 import Header from './Header';
+import InputForDelete from './InputForDelete';
 
-import { addPeople, fetchPeople } from '../actions';
+import { addPeople, fetchPeople, addPeopleMongoDB, fetchDataById} from '../actions';
 
-function App ({ addPeople, fetchPeople, peoples }) {
+function App ({ addPeople, fetchPeople, peoples , addPeopleMongoDB, fetchDataById}) {
 	useEffect(() => {
 		fetchPeople();
 	}, [fetchPeople]);
 
 	useEffect(() => {
-		console.log(peoples);
+		// console.log('useEffect', peoples);
 	}, [peoples]);
 
 	return <div>
 		<Header/>
-		<Input onEnter={(data) => addPeople(data)}/>
+		<Input onEnter={(data) => addPeopleMongoDB(data)}/>
+		<Input onEnter={(id) => fetchDataById(id)}/>
+		{/* <InputForDelete onEnter={(data) => addPeople(data)}/> */}
 		<List values={peoples}/>
 	</div>;
 }
@@ -28,8 +31,10 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
+	fetchDataById,
 	addPeople,
 	fetchPeople,
+	addPeopleMongoDB,
 };
 
 export default connect(

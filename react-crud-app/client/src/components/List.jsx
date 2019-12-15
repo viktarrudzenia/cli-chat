@@ -1,14 +1,12 @@
 import React from 'react';
 
 class List extends React.PureComponent {
-	render () {
+	render() {
 		const { values } = this.props;
 		return <ul>
-			{console.log('before LIST', values)}
 			{values.map(
-				(item, idx) => <li key={idx}>{item.title}</li>,
+				(item) => <li key={item._id}>Title:"{item.title}". Body: "{item.body}". My id is: "{item._id}"</li>,
 			)}
-			{console.log('after LIST', values)}
 		</ul>;
 	}
 }
