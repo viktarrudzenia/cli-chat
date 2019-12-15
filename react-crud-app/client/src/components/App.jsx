@@ -10,7 +10,7 @@ import { addPeople, fetchPeople } from '../actions';
 function App ({ addPeople, fetchPeople, peoples }) {
 	useEffect(() => {
 		fetchPeople();
-	}, []);
+	}, [fetchPeople]);
 
 	useEffect(() => {
 		console.log(peoples);

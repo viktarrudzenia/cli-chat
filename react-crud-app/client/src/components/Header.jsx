@@ -6,8 +6,10 @@ import Statistic from './Statistic';
 
 export function Header ({ peoples }) {
 	return <header>
+			{console.log('before HEADER', peoples)}
 		<span>Peoples: {peoples.length}</span>
 		<Statistic peoples={peoples}/>
+			{console.log('after HEADER', peoples)}
 	</header>
 }
 

@@ -15,6 +15,7 @@ const reducer = (state = [], action) => {
 				return i.name !== action.payload.name;
 			});
 		case ADD_PEOPLES:
+			console.log('ADD_PEOPLES in reducer', action)
 			return [...action.payload];
 		default:
 			return state;
