@@ -5,8 +5,9 @@ export default function postDataToBD(body, title) {
         "title": title,
         "body": body,
     }
+    const url = "http://localhost:3001/api/v1/things/";
 
-    return axios.post('http://localhost:3001/api/v1/things/', data).then((data) => {
+    return axios.post(url, data).then((data) => {
         return data.data
     })
 }

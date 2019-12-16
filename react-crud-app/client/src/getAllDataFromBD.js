@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+const url = 'http://localhost:3001/api/v1/things/';
+
 export default function getAllDataFromBD () {
-	return axios.get('http://localhost:3001/api/v1/things/').then((data) => data.data);
+	return axios.get(url).then((data) => data.data);
 }
