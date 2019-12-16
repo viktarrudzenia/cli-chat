@@ -29,8 +29,8 @@ export function expectDeleteByIdFromBD(id) {
 	return (dispatch) => {
 		deleteByIdFromBD(id).then((data) => {
 			if (data === 'OK') {
-				getAllDataFromBD().then((data) => {
-					return dispatch(addAllData(data))
+				getAllDataFromBD().then((alldata) => {
+					return dispatch(addAllData(alldata))
 				});
 			}
 		});
