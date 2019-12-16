@@ -6,7 +6,7 @@ class ButtonForDelete extends React.PureComponent {
         const deleteById = () => {
             func(id);
         }
-        return  <button onClick={deleteById}>
+        return  <button className="all_data--item_button" onClick={deleteById}>
                     {name}
                 </button>
     }

@@ -6,12 +6,13 @@ import Input from './Input';
 class List extends React.PureComponent {
 	render() {
 		const { values, deleteData, updateData } = this.props;
-		return <ol>
+		return <ol className="all_data--list">
 			{values.map(
-				(item) => <li key={item._id}>
-					My body is: "{item.body}". My id is: "{item._id}"
-					Update: <Input onEnter={(body) => updateData(item._id, body)}/>
-					Delete Button: <ButtonForDelete name="Delete Me" func={deleteData} id={item._id}/>
+				(item) => <li className="all_data--item" key={item._id}>
+					<div>My body is: "{item.body}".</div>
+					<div>My id is: "{item._id}"</div>
+					<div>Update: <Input onEnter={(body) => updateData(item._id, body)}/></div>
+					<div>Delete Button: <ButtonForDelete name="Delete Me" func={deleteData} id={item._id}/></div>
 				</li>,
 			)}
 		</ol>;

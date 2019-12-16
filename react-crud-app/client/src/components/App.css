@@ -1,0 +1,35 @@
+html, body {
+    height: 90%;
+    color: white;
+    background: #2D2D2D;
+}
+
+ol {
+    list-style-position: inside;
+}
+
+ol>li:hover {
+    background-color: rgba(255,255,255, 0.15);
+}
+
+.all_data {
+    background: rgba(161, 153, 204, 0.2);
+}
+
+.all_data--list {
+    background: rgba(0,200,155, 0.2);
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.all_data--item {
+    padding: 10px;
+}
+
+.all_data--item_button {
+    cursor: pointer;
+}
+
+.all_data--header {
+    background: gray;
+}

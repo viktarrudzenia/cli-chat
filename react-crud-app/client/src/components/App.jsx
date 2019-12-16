@@ -6,6 +6,8 @@ import Input from './Input';
 import Header from './Header';
 import InputForUpdate from './InputForUpdate'
 
+import './App.css'
+
 import { expectDeleteByIdFromBD, expectGetAllDataFromBD, expectPostDataToBD, expectUpdateDataByIdFromBD, fetchDataById} from '../actions';
 
 function App ({ expectDeleteByIdFromBD, expectGetAllDataFromBD, peoples , expectPostDataToBD, expectUpdateDataByIdFromBD, fetchDataById}) {
@@ -13,11 +15,7 @@ function App ({ expectDeleteByIdFromBD, expectGetAllDataFromBD, peoples , expect
 		expectGetAllDataFromBD();
 	}, [expectGetAllDataFromBD]);
 
-	useEffect(() => {
-		// console.log('useEffect', peoples);
-	}, [peoples]);
-
-	return <div>
+	return <div className="all_data">
 		<Header/>
 		Post: <Input onEnter={(data) => expectPostDataToBD(data)}/>
 		GetById: <Input onEnter={(id) => fetchDataById(id)}/>
