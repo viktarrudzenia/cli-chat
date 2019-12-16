@@ -2,9 +2,10 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux'
 
 import List from './List';
-import Input from './Input';
 import Header from './Header';
-import InputForUpdate from './InputForUpdate'
+import Input from './Input';
+import InputForPost from './InputForPost';
+import InputForUpdate from './InputForUpdate';
 
 import './App.css'
 
@@ -19,7 +20,7 @@ function App ({ expectDeleteByIdFromBD, expectGetAllDataFromBD, peoples , expect
 		<Header/>
 		<div className="all_inputs">
 			<div>
-				Post (body): <Input onEnter={(data) => expectPostDataToBD(data)}/>
+				Post (body, title = body): <InputForPost onEnter={(body, title) => expectPostDataToBD(body, title)}/>
 			</div>
 			<div>
 				GetById (id): <Input onEnter={(id) => fetchDataById(id)}/>

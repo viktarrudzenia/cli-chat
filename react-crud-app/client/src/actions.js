@@ -44,9 +44,9 @@ export function deleteById(id = []) {
 	}
 }
 
-export function expectPostDataToBD(title) {
+export function expectPostDataToBD(body, title) {
 	return (dispatch) => {
-		postDataToBD(title).then((data) => {
+		postDataToBD(body, title).then((data) => {
 			if (data === 'Created') {
 				getAllDataFromBD().then((data) => {
 					return dispatch(addAllData(data))
