@@ -17,11 +17,19 @@ function App ({ expectDeleteByIdFromBD, expectGetAllDataFromBD, peoples , expect
 
 	return <div className="all_data">
 		<Header/>
-		Post: <Input onEnter={(data) => expectPostDataToBD(data)}/>
-		GetById: <Input onEnter={(id) => fetchDataById(id)}/>
-		DeleteById: <Input onEnter={(id) => expectDeleteByIdFromBD(id)}/>
-		<div>
-		UpdateById(id, body): <InputForUpdate onEnter={(id, body) => expectUpdateDataByIdFromBD(id, body)}/>
+		<div className="all_inputs">
+			<div>
+				Post (body): <Input onEnter={(data) => expectPostDataToBD(data)}/>
+			</div>
+			<div>
+				GetById (id): <Input onEnter={(id) => fetchDataById(id)}/>
+			</div>
+			<div>
+				DeleteById (id): <Input onEnter={(id) => expectDeleteByIdFromBD(id)}/>
+			</div>
+			<div>
+				UpdateById (id, body): <InputForUpdate onEnter={(id, body) => expectUpdateDataByIdFromBD(id, body)}/>
+			</div>
 		</div>
 		<List values={peoples} deleteData={expectDeleteByIdFromBD} updateData={expectUpdateDataByIdFromBD}/>
 	</div>;

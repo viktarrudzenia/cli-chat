@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import Statistic from './Statistic';
 
 export function Header ({ peoples }) {
-	return <header>
-		<span>Now your database have: {peoples.length} items</span>
+	return <header className="all_data--header">
+		<div>Now your database have: {peoples.length} items</div>
 		<Statistic data={peoples}/>
 	</header>
 }
