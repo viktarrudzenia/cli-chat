@@ -7,7 +7,7 @@ export default function InputForPost({ onEnter }) {
 	const regExpForBody = /^[^,]+/;
 	const regExpForTitle = /[^,]+$/;
 
-	return <input
+	return <input placeholder="Type here..."
 		onChange={(e) => {
 			setData(e.target.value);
 		}}

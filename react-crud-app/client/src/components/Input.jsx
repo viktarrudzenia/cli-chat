@@ -5,7 +5,7 @@ const ENTER = 13;
 export default function Input ({ onEnter }) {
 	const [data, setData] = useState('');
 
-	return <input
+	return <input placeholder="Type here..."
 		onChange={(e) => {
 			setData(e.target.value);
 		}}

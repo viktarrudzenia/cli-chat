@@ -7,7 +7,7 @@ export default function InputForDelete({ onEnter }) {
 	const regExpForId = /^[\d\w]+/;
 	const regExpForBody = /(?<=[\d\w]+, )[\s\S]+/;
 
-	return <input
+	return <input placeholder="Type here..."
 		onChange={(e) => {
 			setData(e.target.value);
 		}}
