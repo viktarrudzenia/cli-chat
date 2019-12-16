@@ -20,6 +20,9 @@ ol>li:hover {
 }
 
 .all_data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background: rgba(161, 153, 204, 0.2);
 }
 
@@ -59,4 +62,5 @@ ol>li:hover {
 .all_inputs > div {
     color: skyblue;
     font-size: 26px;
+    padding: 5px;
 }
