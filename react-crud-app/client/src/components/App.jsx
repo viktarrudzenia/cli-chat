@@ -25,7 +25,7 @@ function App ({ expectDeleteByIdFromBD, expectGetAllDataFromBD, peoples , expect
 		<div>
 		UpdateById(id, body): <InputForUpdate onEnter={(id, body) => expectUpdateDataByIdFromBD(id, body)}/>
 		</div>
-		<List values={peoples} deleteData={expectDeleteByIdFromBD}/>
+		<List values={peoples} deleteData={expectDeleteByIdFromBD} updateData={expectUpdateDataByIdFromBD}/>
 	</div>;
 }
 

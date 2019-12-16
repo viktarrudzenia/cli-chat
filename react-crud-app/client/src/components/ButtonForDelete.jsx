@@ -1,6 +1,6 @@
 import React from 'react';
 
-class Button extends React.PureComponent {
+class ButtonForDelete extends React.PureComponent {
     render() {
         const { name, func, id } = this.props;
         const deleteById = () => {
@@ -12,4 +12,4 @@ class Button extends React.PureComponent {
     }
 }
 
-export default Button;
+export default ButtonForDelete;
