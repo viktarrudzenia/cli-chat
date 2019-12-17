@@ -15,7 +15,7 @@ export default function InputForPostSumbit( props ) {
 
 	<form onSubmit={handlePost}>
 		<label>
-			Post title:
+			Title:
 				<input placeholder="Type title here..."
 				type="text"
 				value={postTitle}
@@ -23,33 +23,14 @@ export default function InputForPostSumbit( props ) {
 			/>
 		</label>
 		<label>
-			Post body:
+			Body:
 				<input placeholder="Type body here..."
 				type="text"
 				value={postBody}
 				onChange={e => setPostBody(e.target.value)}
 			/>
 		</label>
-		<input type="submit" value="Post" />
+		<input type="submit" value="Post data" />
 	</form>
 </div>
-
-	// return <input placeholder="Type here..."
-	// 	onChange={(e) => {
-	// 		setData(e.target.value);
-	// 	}}
-	// 	onKeyDown={(e) => {
-	// 		if (e.keyCode === ENTER) {
-	// 			if (regExpForBody.exec(data) !== null && regExpForTitle.exec(data) !== null) {
-	// 				const onEnterBody = (data.match(regExpForBody)[0]);
-	// 				const onEnterTitle = (data.match(regExpForTitle)[0]);
-	// 				onEnter(onEnterBody, onEnterTitle);
-	// 			} else {
-    //                 onEnter(data);
-	// 			}
-	// 			setData('');
-	// 			e.target.value = '';
-	// 		}
-	// 	}}
-	// />;
 }

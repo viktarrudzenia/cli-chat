@@ -4,9 +4,8 @@ import { connect } from 'react-redux'
 import List from './List';
 import Header from './Header';
 import Input from './Input';
-import InputForPost from './InputForPost';
 import InputForPostSubmit from './InputForPostSubmit';
-import InputForUpdate from './InputForUpdate';
+import InputForUpdateSubmit from './InputForUpdateSubmit';
 
 import './App.css'
 
@@ -20,7 +19,6 @@ function App({ expectDeleteByIdFromBD, expectGetAllDataFromBD, peoples, expectPo
 	return <div className="all_data">
 		<Header />
 		<div className="all_inputs">
-			<InputForPost onEnter={(body, title) => expectPostDataToBD(body, title)} />
 			<InputForPostSubmit post={expectPostDataToBD} />
 			<div>
 				GetById (id): <Input onEnter={(id) => fetchDataById(id)} />
@@ -28,7 +26,7 @@ function App({ expectDeleteByIdFromBD, expectGetAllDataFromBD, peoples, expectPo
 			<div>
 				DeleteById (id): <Input onEnter={(id) => expectDeleteByIdFromBD(id)} />
 			</div>
-			<InputForUpdate onEnter={(id, body) => expectUpdateDataByIdFromBD(id, body)} />
+			<InputForUpdateSubmit update={expectUpdateDataByIdFromBD} />
 		</div>
 		<List values={peoples} deleteData={expectDeleteByIdFromBD} updateData={expectUpdateDataByIdFromBD} />
 	</div>;

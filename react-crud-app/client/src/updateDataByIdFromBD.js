@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-export default function updateDataByIdFromBD(id, body) {
+export default function updateDataByIdFromBD(id, title, body) {
     const data = {
-        "title": body,
+        "title": title,
         "body": body,
     }
 

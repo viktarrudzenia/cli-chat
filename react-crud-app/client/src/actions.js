@@ -78,9 +78,9 @@ export function addAllData(data = []) {
 	}
 }
 
-export function expectUpdateDataByIdFromBD(id, body) {
+export function expectUpdateDataByIdFromBD(id, title, body) {
 	return (dispatch) => {
-		updateDataByIdFromBD(id, body).then((data) => {
+		updateDataByIdFromBD(id, title, body).then((data) => {
 			if (data === 'OK') {
 				getAllDataFromBD().then((data) => {
 					return dispatch(addAllData(data))
