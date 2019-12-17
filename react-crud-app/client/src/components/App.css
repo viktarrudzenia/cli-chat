@@ -63,4 +63,6 @@ ol>li:hover {
     color: skyblue;
     font-size: 26px;
     padding: 5px;
+    margin: 5px;
+    border: 1px solid rgba(101,255,0, 0.3);
 }
