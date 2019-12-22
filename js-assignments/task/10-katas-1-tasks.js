@@ -105,10 +105,30 @@ function* expandBraces(str) {
  *          [ 9,10,14,15 ]]
  *
  */
-function getZigZagMatrix(n) {
-    throw new Error('Not implemented');
-}
 
+function getZigZagMatrix(n) {
+    const result = [];
+    for (let i = 0; i < n; i++) {
+        result[i] = [];
+    }
+
+    let i = 1;
+    let j = 1;
+
+    for (let currentNumber = 0; currentNumber < n ** 2; currentNumber++) {
+        result[i - 1][j - 1] = currentNumber;
+
+        if ((i + j) & 1) {
+            (i < n) ? i += 1 : j += 2;
+            if (j > 1) j--;
+        } else {
+            (j < n) ? j += 1 : i += 2;
+            if (i > 1) i--;
+        }
+    }
+
+    return result;;
+}
 
 /**
  * Returns true if specified subset of dominoes can be placed in a row accroding to the game rules.
@@ -154,8 +174,31 @@ function canDominoesMakeRow(dominoes) {
  * [ 0, 1, 2, 5, 7, 8, 9] => '0-2,5,7-9'
  * [ 1, 2, 4, 5]          => '1,2,4,5'
  */
+
 function extractRanges(nums) {
-    throw new Error('Not implemented');
+    let result = '';
+    nums.map((currentNumber, i) => {
+        if (i === 0) {
+            result += nums[i];
+            return;
+        } else if (i === nums.length - 1) {
+            (currentNumber === nums[i - 1] + 1 && currentNumber === nums[i - 2] + 2)
+                ? result += `-${currentNumber}`
+                : result += `,${currentNumber}`;
+        } else if (currentNumber === nums[i - 1] + 1) {
+            if (currentNumber === nums[i - 2] + 2 &&
+                currentNumber !== nums[i + 1] - 1) {
+                result += `-${currentNumber}`;
+            }
+            if ((currentNumber !== nums[i - 2] + 2) &&
+                currentNumber !== nums[i + 1] - 1) {
+                result += `,${currentNumber}`;
+            }
+        } else {
+            result += `,${currentNumber}`;
+        }
+    });
+    return result;
 }
 
 module.exports = {
