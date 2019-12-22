@@ -33,10 +33,33 @@
  *   '|_||_  _||_| _||_| _||_| _|\n',
  *
  */
-function parseBankAccount(bankAccount) {
-    throw new Error('Not implemented');
-}
 
+const numbers = [
+    ' _ \n| |\n|_|',
+    '   \n  |\n  |',
+    ' _ \n _|\n|_ ',
+    ' _ \n _|\n _|',
+    '   \n|_|\n  |',
+    ' _ \n|_ \n _|',
+    ' _ \n|_ \n|_|',
+    ' _ \n  |\n  |',
+    ' _ \n|_|\n|_|',
+    ' _ \n|_|\n _|'
+];
+
+function parseBankAccount(bankAccount) {
+    let arrayWithStringNumbers = bankAccount.split('\n');
+    let result = '';
+
+    for (let i = 0; i < arrayWithStringNumbers[0].length / 3; i++) {
+        let firstPartOfNumber = arrayWithStringNumbers[0].slice(i * 3, i * 3 + 3);
+        let secondPartOfNumber = arrayWithStringNumbers[1].slice(i * 3, i * 3 + 3);
+        let thirdPartOfNumber = arrayWithStringNumbers[2].slice(i * 3, i * 3 + 3);
+        let fullNumber = `${firstPartOfNumber}\n${secondPartOfNumber}\n${thirdPartOfNumber}`;
+        result += numbers.indexOf(fullNumber);
+    }
+    return +result;
+}
 
 /**
  * Returns the string, but with line breaks inserted at just the right places to make sure that no line is longer than the specified column number.
@@ -62,8 +85,19 @@ function parseBankAccount(bankAccount) {
  *                                                                                                'sequence of',
  *                                                                                                'characters.'
  */
-function* wrapText(text, columns) {
-    throw new Error('Not implemented');
+
+function* wrapText(text, maxLength) {
+    const arrayWithStringWords = text.split(' ');
+
+    while (arrayWithStringWords.length) {
+        if (arrayWithStringWords.length > 1 && arrayWithStringWords[0].length + arrayWithStringWords[1].length + 1 <= maxLength) {
+            arrayWithStringWords[0] += ' ' + arrayWithStringWords[1];
+            arrayWithStringWords.splice(1, 1);
+        } else {
+            yield arrayWithStringWords[0];
+            arrayWithStringWords.shift();
+        }
+    }
 }
 
 
@@ -135,12 +169,12 @@ function getPokerHandRank(hand) {
  *    '+-------------+\n'
  */
 function* getFigureRectangles(figure) {
-   throw new Error('Not implemented');
+    throw new Error('Not implemented');
 }
 
 
 module.exports = {
-    parseBankAccount : parseBankAccount,
+    parseBankAccount: parseBankAccount,
     wrapText: wrapText,
     PokerRank: PokerRank,
     getPokerHandRank: getPokerHandRank,
