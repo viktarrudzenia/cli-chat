@@ -18,6 +18,8 @@ const {
     validateParam,
 } = require('./utils/validator');
 
+const validateIdParam = validateParam('id');
+
 const port = parseInt(process.env.PORT, 10) || 3002
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
