@@ -12,5 +12,10 @@ export default () => (
         <a>About with hello</a>
       </Link>
     </li>
+    <li>
+      <Link href="/things" as="/things">
+        <a>Things</a>
+      </Link>
+    </li>
   </ul>
 )

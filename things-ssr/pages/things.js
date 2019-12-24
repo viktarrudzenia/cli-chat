@@ -1,28 +1,50 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux'
-import { startClock, serverRenderClock } from '../store'
-import Examples from '../components/examples'
 
-class Index extends React.Component {
-    static getInitialProps({ reduxStore, req }) {
-        const isServer = !!req
-        reduxStore.dispatch(serverRenderClock(isServer))
+import List from '../src/components/List';
+import Header from '../src/components/Header';
+import Input from '../src/components/Input';
+import InputForPostSubmit from '../src/components/InputForPostSubmit';
+import InputForUpdateSubmit from '../src/components/InputForUpdateSubmit';
 
-        return {}
-    }
+// import './App.css'
 
-    componentDidMount() {
-        const { dispatch } = this.props
-        this.timer = startClock(dispatch)
-    }
+import { expectDeleteByIdFromBD, expectGetAllDataFromBD, expectPostDataToBD, expectUpdateDataByIdFromBD, fetchDataById } from '../src/actions';
 
-    componentWillUnmount() {
-        clearInterval(this.timer)
-    }
+function App({ expectDeleteByIdFromBD, expectGetAllDataFromBD, peoples, expectPostDataToBD, expectUpdateDataByIdFromBD, fetchDataById }) {
+	useEffect(() => {
+		expectGetAllDataFromBD();
+    }, [expectGetAllDataFromBD]);
 
-    render() {
-        return <Examples />
-    }
+	return <div className="all_data">
+		<Header />
+		<div className="all_inputs">
+			<InputForPostSubmit post={expectPostDataToBD} />
+			<div>
+				GetById (id): <Input onEnter={(id) => fetchDataById(id)} />
+			</div>
+			<div>
+				DeleteById (id): <Input onEnter={(id) => expectDeleteByIdFromBD(id)} />
+			</div>
+			<InputForUpdateSubmit update={expectUpdateDataByIdFromBD} />
+		</div>
+		<List values={peoples} deleteData={expectDeleteByIdFromBD} updateData={expectUpdateDataByIdFromBD} />
+	</div>;
 }
 
-export default connect()(Index)
+const mapStateToProps = (state) => ({
+	peoples: state,
+});
+
+const mapDispatchToProps = {
+	expectUpdateDataByIdFromBD,
+	expectDeleteByIdFromBD,
+	fetchDataById,
+	expectGetAllDataFromBD,
+	expectPostDataToBD,
+};
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps,
+)(App);
