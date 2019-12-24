@@ -12,11 +12,11 @@ const {
     updateThing,
     deleteThing,
     getThingById,
-} = require('../services/thing');
+} = require('./services/thing');
 
 const {
     validateParam,
-} = require('../utils/validator');
+} = require('./utils/validator');
 
 const port = parseInt(process.env.PORT, 10) || 3002
 const dev = process.env.NODE_ENV !== 'production'
