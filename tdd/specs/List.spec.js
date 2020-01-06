@@ -1,277 +1,675 @@
-// const Node = require('../src/Node');
 const List = require('../src/List');
 
 describe('List', function () {
-    describe('#add', function () {
-        // beforeEach(function () { const list = new List() });
+    describe('1) #add', function () {
+        describe('1.1) #should correct add one value in the empty list', function () {
+            let list;
+            beforeEach(function () {
+                list = new List();
+                list.add(1);
+            });
 
-        it("should correct insests 1 value in list", function () {
-            const list = new List()
-            list.add(1);
-            expect(list.head).to.be.equal(Node(1));
-            expect(list.head.next).to.be.null;
-        });
+            it("value of the head in the list should be the value that we added", function () {
+                expect(list.head.value).to.be.equal(1);
+            });
 
-        it("should correct insests values in list", function () {
-            const list = new List()
-            list.add(1);
-            list.add(2)
-            expect(list.head).to.be.equal(Node(1));
-            expect(list.head.next).to.be.equal(Node(2));
+            it("head.next should be equal null", function () {
+                expect(list.head.next).to.be.null;
+            });
 
-        });
+            it("head.prev should be equal null", function () {
+                expect(list.head.prev).to.be.null;
+            });
 
-        it('should returns correct length of list', function () {
-            const list = new List()
-            list.add(1);
-            expect(list.length).to.be.equal(Node(1));
-
-            list.add(2);
-            expect(list.length).to.be.equal(Node(2));
-        });
-    })
-
-    describe('#getAt', function () {
-
-        const list = new List();
-        list.add(2);
-        list.add(4);
-        list.add(6);
-        list.add(8);
-
-        it('should returns correct value in the List', function () {
-            let result = list.getAt(3);
-            expect(result).to.equal(Node(8));
-            expect(result.next).to.be.null;
+            it("the length of the list should be equal 1", function () {
+                expect(list.length).to.be.equal(1);
+            });
         })
 
-        it('shold return null if list\'s length less or more than value', function () {
-            let result = list.getAt(10);
+        describe('1.2) #should correct add two values in the empty list', function () {
+            let list;
+            beforeEach(function () {
+                list = new List();
+                list.add(1);
+                list.add(2);
+            });
 
-            expect(result).to.be.null;
+            it("value of the head in the list should be the value that we added last", function () {
+                expect(list.head.value).to.be.equal(2);
+            });
+
+            it("head.prev should be equal null", function () {
+                expect(list.head.prev).to.be.null;
+            });
+
+            it("value of the head.next should be equal first value that we added", function () {
+                expect(list.head.next.value).to.be.equal(1);
+            });
+
+            it("head.next.next should be equal null", function () {
+                expect(list.head.next.next).to.be.null;
+            });
+
+            it("value of the head.next.prev should be equal head value", function () {
+                expect(list.head.next.prev.value).to.be.equal(2);
+            });
+
+            it("the length of the list should be equal 2", function () {
+                expect(list.length).to.be.equal(2);
+            });
+        })
+
+        describe('1.3) #should correct add one value in the list with 3 values', function () {
+            let list;
+            beforeEach(function () {
+                list = new List(1, 2, 3);
+                list.add(4);
+            });
+
+            it("value of the head in the list should be the value that we added", function () {
+                expect(list.head.value).to.be.equal(4);
+            });
+
+            it("head.prev should be equal null", function () {
+                expect(list.head.prev).to.be.null;
+            });
+
+            it("value of the head.next should be equal last value in the list before value that we added", function () {
+                expect(list.head.next.value).to.be.equal(3);
+            });
+
+            it("value of the head.next.next should be equal prelast value in the list before value that we added", function () {
+                expect(list.head.next.next.value).to.be.equal(2);
+            });
+
+            it("value of the head.next.prev should be equal head value (or value that we added)", function () {
+                expect(list.head.next.prev.value).to.be.equal(4);
+            });
+
+            it("the length of the list should be equal 4", function () {
+                expect(list.length).to.be.equal(4);
+            });
+        })
+
+        describe('1.4) #should correct add two values in the list with 3 values', function () {
+            let list;
+            beforeEach(function () {
+                list = new List(1, 2, 3);
+                list.add(4);
+                list.add(5);
+            });
+
+            it("value of the head in the list should be the value that we added last", function () {
+                expect(list.head.value).to.be.equal(5);
+            });
+
+            it("head.prev should be equal null", function () {
+                expect(list.head.prev).to.be.null;
+            });
+
+            it("value of the head.next should be equal first value that we added", function () {
+                expect(list.head.next.value).to.be.equal(4);
+            });
+
+            it("value of the head.next.next should be equal last value in the list before values that we added", function () {
+                expect(list.head.next.next.value).to.be.equal(3);
+            });
+
+            it("value of the head.next.prev should be equal head value (or value that we added last)", function () {
+                expect(list.head.next.prev.value).to.be.equal(5);
+            });
+
+            it("the length of the list should be equal 5", function () {
+                expect(list.length).to.be.equal(5);
+            });
+        })
+
+        describe('1.5) #should return TypeError with error message if adding value is not an integer number', function () {
+            let list;
+            beforeEach(function () {
+                list = new List(10, 20, 30, 40, 50, 60);
+            });
+
+            it('should return TypeError with error message if adding value is the string', function () {
+                let result = list.add('someString');
+
+                expect(result).to.throw(
+                    TypeError,
+                    "Strings are not allowed for add method. The adding value must be an integer number."
+                )
+            })
+
+            it('should return TypeError with error message if adding value is the float number', function () {
+                let result = list.add(123.456);
+
+                expect(result).to.throw(
+                    TypeError,
+                    "Float numbers are not allowed for add method. The adding value must be an integer number."
+                )
+            })
+
+            it('should return TypeError with error message if adding value is the Infinity', function () {
+                let result = list.add(Infinity);
+
+                expect(result).to.throw(
+                    TypeError,
+                    "Infinity are not allowed for add method. The adding value must be an integer number."
+                )
+            })
+
+            it('should return TypeError with error message if adding value is the -Infinity', function () {
+                let result = list.add(-Infinity);
+
+                expect(result).to.throw(
+                    TypeError,
+                    "-Infinity are not allowed for add method. The adding value must be an integer number."
+                )
+            })
+
+            it('should return TypeError with error message if adding value is the NaN', function () {
+                let result = list.add(NaN);
+
+                expect(result).to.throw(
+                    TypeError,
+                    "NaN are not allowed for add method. The adding value must be an integer number."
+                )
+            })
+
+            it('should return TypeError with error message if adding value is the Array', function () {
+                let result = list.add([123]);
+
+                expect(result).to.throw(
+                    TypeError,
+                    "Arrays are not allowed for add method. The adding value must be an integer number."
+                )
+            })
+
+            it('should return TypeError with error message if adding value is the Object', function () {
+                let result = list.add({ 123: '456' });
+
+                expect(result).to.throw(
+                    TypeError,
+                    "Objects are not allowed for add method. The adding value must be an integer number."
+                )
+            })
         })
     })
 
-    describe('#removeAt', function () {
+    describe('2) #getAt', function () {
 
-        const list = new List();
+        describe('2.1) #should correct returns first value in the List', function () {
+            let list;
+            let result;
+            beforeEach(function () {
+                list = new List(10, 20, 30, 40, 50, 60);
+                result = list.getAt(0);
+            });
 
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        list.removeAt(0);
+            it('value which returns should be equal first value in the list', function () {
+                expect(result.value).to.equal(10);
+            })
 
-        const result = list.getAt(0);
+            it('(return value).next.value should be second value in the list', function () {
+                expect(result.next.value).to.be.equal(20);
+            })
 
-        it('should correct return item after removeAt in list', () => {
+            it('(return value).prev should be equal null', function () {
+                expect(result.prev).to.be.null;
+            })
+        })
 
-            expect(result).to.equal(Node(2));
-        });
+        describe('2.2) #should correct returns third value in the List', function () {
+            let list;
+            let result;
+            beforeEach(function () {
+                list = new List(10, 20, 30, 40, 50, 60);
+                result = list.getAt(2);
+            });
 
-        it('should correct update head of the list', () => {
-            expect(list.head).to.equal(Node(2));
-        });
+            it('value which returns should be equal third value in the list', function () {
+                expect(result.value).to.equal(30);
+            })
 
-        it('should correct update list.next position', () => {
-            expect(list.next).to.equal(Node(3));
-        });
+            it('(return value).next.value should be fourth value in the list', function () {
+                expect(result.next.value).to.be.equal(40);
+            })
 
-        it('should correct update length of the list', () => {
-            expect(list.lenth).to.equal(Node(2));
-        });
+            it('(return value).prev.value should be second value in the list', function () {
+                expect(result.prev.value).to.be.equal(20);
+            })
+        })
 
-        it('should correct delete 1-item list', () => {
-            const list = new List();
+        describe('2.3) #should correct returns last value in the List', function () {
+            let list;
+            let result;
+            beforeEach(function () {
+                list = new List(10, 20, 30, 40, 50, 60);
+                result = list.getAt(5);
+            });
 
-            list.add(1);
-            list.removeAt(0);
+            it('value which returns should be equal last value in the list', function () {
+                expect(result.value).to.equal(60);
+            })
 
-            expect(list.head).to.be.null;
-        });
+            it('(return value).next should be equal null', function () {
+                expect(result.next).to.be.null;
+            })
 
+            it('(return value).prev.value should be prelast value in the list', function () {
+                expect(result.prev.value).to.be.equal(50);
+            })
+        })
+
+        describe('2.4) #should return RangeError with error message if index less than 0 or more than list\'s length - 1', function () {
+            let list;
+            beforeEach(function () {
+                list = new List(10, 20, 30, 40, 50, 60);
+            });
+
+            it('should return RangeError with error message if index less than 0', function () {
+                let result = list.getAt(-2);
+
+                expect(result).to.throw(
+                    RangeError,
+                    "Index must be greater or equal 0 and less than (list.length -1)"
+                )
+            })
+
+            it('should return RangeError with error message if index more than list\'s length - 1', function () {
+                let result = list.getAt(12);
+
+                expect(result).to.throw(
+                    RangeError,
+                    "Index must be greater or equal 0 and less than (list.length -1)"
+                )
+            })
+        })
+        
+        describe('2.5) #should return TypeError with error message if getting index is not an integer number', function () {
+            let list;
+            beforeEach(function () {
+                list = new List(10, 20, 30, 40, 50, 60);
+            });
+
+            it('should return TypeError with error message if getting index is the string', function () {
+                let result = list.getAt('someString');
+
+                expect(result).to.throw(
+                    TypeError,
+                    "Strings are not allowed for getAt method. The index must be an integer number."
+                )
+            })
+
+            it('should return TypeError with error message if getting index is the float number', function () {
+                let result = list.getAt(123.456);
+
+                expect(result).to.throw(
+                    TypeError,
+                    "Float numbers are not allowed for getAt method. The index must be an integer number."
+                )
+            })
+
+            it('should return TypeError with error message if getting index is the Infinity', function () {
+                let result = list.getAt(Infinity);
+
+                expect(result).to.throw(
+                    TypeError,
+                    "Infinity are not allowed for getAt method. The index must be an integer number."
+                )
+            })
+
+            it('should return TypeError with error message if getting index is the -Infinity', function () {
+                let result = list.getAt(-Infinity);
+
+                expect(result).to.throw(
+                    TypeError,
+                    "-Infinity are not allowed for getAt method. The index must be an integer number."
+                )
+            })
+
+            it('should return TypeError with error message if getting index is the NaN', function () {
+                let result = list.getAt(NaN);
+
+                expect(result).to.throw(
+                    TypeError,
+                    "NaN are not allowed for getAt method. The index must be an integer number."
+                )
+            })
+
+            it('should return TypeError with error message if getting index is the Array', function () {
+                let result = list.getAt([123]);
+
+                expect(result).to.throw(
+                    TypeError,
+                    "Arrays are not allowed for getAt method. The index must be an integer number."
+                )
+            })
+
+            it('should return TypeError with error message if getting index is the Object', function () {
+                let result = list.getAt({ 123: '456' });
+
+                expect(result).to.throw(
+                    TypeError,
+                    "Objects are not allowed for getAt method. The index must be an integer number."
+                )
+            })
+        })
     })
 
-    describe('#indexOf', function () {
-        const list = new List();
-        list.add(2);
-        list.add(4);
-        list.add(6);
-        list.add(8);
-        list.add(10);
+    describe('3) #removeAt', function () {
+        describe('3.1) #should correct remove first value in the list with 6 values', function () {
+            let list;
+            beforeEach(function () {
+                list = new List(10, 20, 30, 40, 50, 60);
+                list.removeAt(0);
+            });
 
-        it('should returns wright posititon of element in List №1', function () {
-            const result = list.indexOf(6);
+            it("value of the head in the list should be the value that was second before removing", function () {
+                expect(list.head.value).to.be.equal(20);
+            });
+
+            it("head.prev should be equal null", function () {
+                expect(list.head.prev).to.be.null;
+            });
+
+            it("value of the head.next should be equal the value that was third before removing", function () {
+                expect(list.head.next.value).to.be.equal(30);
+            });
+
+            it("value of the head.next.next should be equal the value that was fourth before removing", function () {
+                expect(list.head.next.next.value).to.be.equal(40);
+            });
+
+            it("value of the head.next.prev should be equal head value (or value that was second before removing)", function () {
+                expect(list.head.next.prev.value).to.be.equal(20);
+            });
+
+            it("the length of the list should be equal 5", function () {
+                expect(list.length).to.be.equal(5);
+            });
+        })
+
+        describe('3.2) #should correct remove third value in the list with 6 values', function () {
+            let list;
+            beforeEach(function () {
+                list = new List(10, 20, 30, 40, 50, 60);
+                list.removeAt(2);
+            });
+
+            it("value of the head in the list should be the same as before removing third value", function () {
+                expect(list.head.value).to.be.equal(10);
+            });
+
+            it("head.next.next.value should be equal the value that was fourth before removing", function () {
+                expect(list.head.next.next.value).to.be.equal(40);
+            });
+
+            it("head.next.next.next.value should be equal the value that was fifth before removing", function () {
+                expect(list.head.next.next.next.value).to.be.equal(50);
+            });
+
+            it("head.next.next.prev.value should be equal the value that was second before removing", function () {
+                expect(list.head.next.next.prev.value).to.be.equal(20);
+            });
+
+            it("the length of the list should be equal 5", function () {
+                expect(list.length).to.be.equal(5);
+            });
+        })
+
+        describe('3.3) #should correct remove last value in the list with 4 values', function () {
+            let list;
+            beforeEach(function () {
+                list = new List(10, 20, 30, 40);
+                list.removeAt(3);
+            });
+
+            it("value of the head in the list should be the same as before removing last value", function () {
+                expect(list.head.value).to.be.equal(10);
+            });
+
+            it("head.next.next.value should be the same as before removing last value", function () {
+                expect(list.head.next.next.value).to.be.equal(30);
+            });
+
+            it("head.next.next.next should be equal null", function () {
+                expect(list.head.next.next.next).to.be.null;
+            });
+
+            it("head.next.next.prev.value should be the same as before removing last value", function () {
+                expect(list.head.next.next.prev.value).to.be.equal(20);
+            });
+
+            it("the length of the list should be equal 3", function () {
+                expect(list.length).to.be.equal(3);
+            });
+        })
+
+        describe('3.4) #should correct remove value in the list with 1 value', function () {
+            let list;
+            beforeEach(function () {
+                list = new List(10);
+                list.removeAt(0);
+            });
+
+            it("the head in the list should be equal null", function () {
+                expect(list.head).to.be.null();
+            });
+
+            it("the next in the list should be equal null", function () {
+                expect(list.next).to.be.null();
+            });
+
+            it("the length of the list should be equal 0", function () {
+                expect(list.length).to.be.equal(0);
+            });
+        })
+
+        describe('3.5) #should return RangeError with error message if index less than 0 or more than list\'s length - 1', function () {
+            let list;
+            beforeEach(function () {
+                list = new List(10, 20, 30, 40, 50, 60);
+            });
+
+            it('should return RangeError with error message if index less than 0', function () {
+                let result = list.removeAt(-2);
+
+                expect(result).to.throw(
+                    RangeError,
+                    "Index must be greater or equal 0 and less than (list.length -1)"
+                )
+            })
+
+            it('should return RangeError with error message if index more than list\'s length - 1', function () {
+                let result = list.removeAt(12);
+
+                expect(result).to.throw(
+                    RangeError,
+                    "Index must be greater or equal 0 and less than (list.length -1)"
+                )
+            })
+        })
+
+        describe('3.6) #should return TypeError with error message if searching value is not an integer number', function () {
+            let list;
+            beforeEach(function () {
+                list = new List(10, 20, 30, 40, 50, 60);
+            });
+
+            it('should return TypeError with error message if searching value is the string', function () {
+                let result = list.removeAt('someString');
+
+                expect(result).to.throw(
+                    TypeError,
+                    "Strings are not allowed for removeAt method. The index must be an integer number."
+                )
+            })
+
+            it('should return TypeError with error message if searching value is the float number', function () {
+                let result = list.removeAt(123.456);
+
+                expect(result).to.throw(
+                    TypeError,
+                    "Float numbers are not allowed for removeAt method. The index must be an integer number."
+                )
+            })
+
+            it('should return TypeError with error message if searching value is the Infinity', function () {
+                let result = list.removeAt(Infinity);
+
+                expect(result).to.throw(
+                    TypeError,
+                    "Infinity are not allowed for removeAt method. The index must be an integer number."
+                )
+            })
+
+            it('should return TypeError with error message if searching value is the -Infinity', function () {
+                let result = list.removeAt(-Infinity);
+
+                expect(result).to.throw(
+                    TypeError,
+                    "-Infinity are not allowed for removeAt method. The index must be an integer number."
+                )
+            })
+
+            it('should return TypeError with error message if searching value is the NaN', function () {
+                let result = list.removeAt(NaN);
+
+                expect(result).to.throw(
+                    TypeError,
+                    "NaN are not allowed for removeAt method. The index must be an integer number."
+                )
+            })
+
+            it('should return TypeError with error message if searching value is the Array', function () {
+                let result = list.removeAt([123]);
+
+                expect(result).to.throw(
+                    TypeError,
+                    "Arrays are not allowed for removeAt method. The index must be an integer number."
+                )
+            })
+
+            it('should return TypeError with error message if searching value is the Object', function () {
+                let result = list.removeAt({ 123: '456' });
+
+                expect(result).to.throw(
+                    TypeError,
+                    "Objects are not allowed for removeAt method. The index must be an integer number."
+                )
+            })
+        })
+    })
+
+    describe('4) #indexOf', function () {
+        describe('4.1) #should return wright indexex of search elements in the list', function () {
+            let list;
+            beforeEach(function () {
+                list = new List(10, 20, 30, 40, 50, 60);
+            });
+        })
+
+        it('should return first index of element in the list', function () {
+            const result = list.indexOf(10);
+            expect(result).to.be.equal(0);
+        })
+
+        it('should return third index of element in the list', function () {
+            const result = list.indexOf(30);
             expect(result).to.be.equal(2);
         })
 
-        it('should returns wright posititon of element in List №2', function () {
-            const result = list.indexOf(2);
-            expect(result).to.equal(0);
+        it('should return last index of element in the list', function () {
+            const result = list.indexOf(60);
+            expect(result).to.be.equal(5);
         })
 
-        it('should returns -1 if do not found element in List', function () {
-            const result = list.indexOf(3);
-            expect(result).to.equal(-1);
+        describe('4.2) #should return -1 if searching value do not matched in the list', function () {
+            let list;
+            beforeEach(function () {
+                list = new List(10, 20, 30, 40, 50, 60);
+            });
+
+            it('should return -1 if searching value less than 0', function () {
+                const result = list.indexOf(123);
+                expect(result).to.be.equal(-1);
+            })
+
+            it('should return -1 if searching value a big integer', function () {
+                const result = list.indexOf(123456789);
+                expect(result).to.be.equal(-1);
+            })
+        })
+
+        describe('4.3) #should return TypeError with error message if searching value is not an integer number', function () {
+            let list;
+            beforeEach(function () {
+                list = new List(10, 20, 30, 40, 50, 60);
+            });
+
+            it('should return TypeError with error message if searching value is the string', function () {
+                let result = list.indexOf('someString');
+
+                expect(result).to.throw(
+                    TypeError,
+                    "Strings are not allowed for indexOf method. The searching value must be an integer number."
+                )
+            })
+
+            it('should return TypeError with error message if searching value is the float number', function () {
+                let result = list.indexOf(123.456);
+
+                expect(result).to.throw(
+                    TypeError,
+                    "Float numbers are not allowed for indexOf method. The searching value must be an integer number."
+                )
+            })
+
+            it('should return TypeError with error message if searching value is the Infinity', function () {
+                let result = list.indexOf(Infinity);
+
+                expect(result).to.throw(
+                    TypeError,
+                    "Infinity are not allowed for indexOf method. The searching value must be an integer number."
+                )
+            })
+
+            it('should return TypeError with error message if searching value is the -Infinity', function () {
+                let result = list.indexOf(-Infinity);
+
+                expect(result).to.throw(
+                    TypeError,
+                    "-Infinity are not allowed for indexOf method. The searching value must be an integer number."
+                )
+            })
+
+            it('should return TypeError with error message if searching value is the NaN', function () {
+                let result = list.indexOf(NaN);
+
+                expect(result).to.throw(
+                    TypeError,
+                    "NaN are not allowed for indexOf method. The searching value must be an integer number."
+                )
+            })
+
+            it('should return TypeError with error message if searching value is the Array', function () {
+                let result = list.indexOf([123]);
+
+                expect(result).to.throw(
+                    TypeError,
+                    "Arrays are not allowed for indexOf method. The searching value must be an integer number."
+                )
+            })
+
+            it('should return TypeError with error message if searching value is the Object', function () {
+                let result = list.indexOf({ 123: '456' });
+
+                expect(result).to.throw(
+                    TypeError,
+                    "Objects are not allowed for indexOf method. The searching value must be an integer number."
+                )
+            })
         })
     });
-
-    describe('#getAt', function () {
-
-        const list = new List(1, 2, 3, 4);
-
-        it('should returns current value of this position', function () {
-            let result = list.getAt(0);
-
-            expect(result).to.equal(Node(1));
-        })
-
-        it('should returns null for non-existent position', function () {
-            let result = list.getAt(10);
-
-            expect(result).to.be.null;
-        })
-
-    });
-
-    describe('#getHead', function () {
-        it('should return the head of List', function () {
-            const list = new List()
-            list.add(Node(1));
-            list.add(2);
-            list.add(3);
-
-            const result = list.getHead();
-
-            expect(result).to.equal(Node(1));
-        })
-    })
-
-    describe('#getTail', function () {
-        it('should return the last element of the List', function () {
-            const list = new List()
-            list.add(1);
-            list.add(2);
-            list.add(3);
-
-            const result = list.getHead();
-
-            expect(result).to.equal(Node(3));
-        })
-    })
-
-    describe('#_addSingleItemToHead', function () {
-
-        const list = new List()
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        list._addSingleItemToHead(4)
-
-        const result = list.getAt(0);
-
-        it('should correct update head of the list', function () {
-            expect(result).to.equal(Node(4));
-        })
-
-        it('should correct add single item to list', function () {
-            expect(result).to.equal(Node(4));
-        })
-
-        it('should correct update item.next item to list', function () {
-            expect(result.next).to.equal(Node(1));
-        })
-
-        it('should correct update item.next.next item to list', function () {
-            expect(result.next.next).to.equal(Node(2));
-        })
-    })
-
-    describe('#addItemsToHead', function () {
-        const list = new List()
-            list.add(1);
-            list.add(2);
-            list.add(3);
-            list.addItemsToHead(4, 5, 6)
-
-            const result = list.getAt(0);
-
-        it('should correct add first item of all items', function () {
-            expect(result).to.equal(Node(4));
-        })
-
-        it('should correct update head of the list', function () {
-            expect(list.head).to.equal(Node(4));
-        })
-
-        it('should correct update head.next of the list', function () {
-            expect(list.head.next).to.equal(Node(5));
-        })
-
-        it('should correct update head.next.next of the list', function () {
-            expect(list.head.next).to.equal(Node(6));
-        })    
-    })
-
-
-    describe('#length', function () {
-        it('should return wright length when using add(value) method', function () {
-            const list = new List()
-            list.add(1);
-            list.add(2);
-            list.add(3);
-            list.add(4);
-
-            const result = list.lenth;
-
-            expect(result).to.equal(4);
-        })
-
-        it('should return correct length when using removeAt(value) method', function () {
-            const list = new List()
-            list.add(1);
-            list.add(2);
-            list.add(3);
-            list.add(4);
-            list.removeAt(2);
-
-            const result = list.length;
-
-            expect(result).to.equal(3);
-        })
-
-        it('should return correct length when using removeAt(value) method', function () {
-            const list = new List(1, 2, 3, 4)
-            list.removeAt(2);
-            list.removeAt(2);
-
-            const result = list.length;
-
-            expect(result).to.equal(2);
-        })
-
-        it('should return correct length when combine add and removeAt methods', function () {
-            const list = new List()
-            list.add(1);
-            list.add(2);
-            list.add(3);
-            list.removeAt(1);
-            list.add(4);
-            list.removeAt(1);
-            list.removeAt(1);
-
-            const result = list.length;
-
-            expect(result).to.equal(1);
-        })
-
-        it('should return correct length when using addItemsToHead method', function () {
-            const list = new List()
-            list.addItemsToHead(1, 2, 3, 4, 5, 6);
-
-            const result = list.length;
-
-            expect(result).to.equal(6);
-        })
-    })
 })
 

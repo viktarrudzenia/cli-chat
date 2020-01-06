@@ -1,10 +1,8 @@
-const Node = require('./Node');
-
 class List {
     constructor(value) {
-        this.value = new Node(value);
         this.head = null;
         this.next = null;
+        this.prev = null;
         this.length = 0;
     }
 
@@ -22,22 +20,6 @@ class List {
 
     indexOf(value) {
 
-    }
-
-    getHead() {
-
-    }
-
-    getTail() {
-
-    }
-
-    _addSingleItemToHead(value) {
-
-    }
-
-    addItemsToHead(...values) {
-        
     }
 }
 
