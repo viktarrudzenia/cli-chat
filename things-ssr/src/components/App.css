@@ -1,0 +1,68 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    color: white;
+    background: #2D2D2D;
+    font-family: Tahoma, Verdana, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 20px;
+}
+
+ol {
+    list-style-position: inside;
+}
+
+ol>li:hover {
+    background-color: rgba(255,255,255, 0.15);
+}
+
+.all_data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(161, 153, 204, 0.2);
+}
+
+.all_data--list {
+    background: rgba(0,200,155, 0.2);
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.all_data--item {
+    padding: 10px;
+    border: 1px solid gray;
+}
+
+.all_data--item_button {
+    cursor: pointer;
+}
+
+.all_data--header {
+    color: indianred;
+    font-size: 32px;
+    display: flex;
+    flex-direction: column;
+}
+
+.all_data--header > div {
+    padding: 10px;
+}
+
+.all_inputs {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.all_inputs > div {
+    color: skyblue;
+    font-size: 26px;
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid rgba(101,255,0, 0.3);
+}
