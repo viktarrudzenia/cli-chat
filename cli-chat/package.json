@@ -1,0 +1,20 @@
+{
+  "name": "cli-chat",
+  "version": "1.0.0",
+  "description": "chat",
+  "main": "index.js",
+  "scripts": {
+    "start": "node chat.js"
+  },
+  "keywords": [],
+  "author": "Viktar Rudzenia",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^3.0.0",
+    "dotenv": "^8.2.0",
+    "node-notifier": "^6.0.0",
+    "node-telegram-bot-api": "^0.40.0",
+    "prompts": "^2.3.0",
+    "ws": "^7.2.0"
+  }
+}

@@ -1,0 +1,1 @@
+Here logs all history for every connection in txt format: "MM-DD-YYYY HH-MM-SS.txt".
