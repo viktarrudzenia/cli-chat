@@ -1,47 +1,56 @@
-# **Viktar Rudzenia**
+# CLI-CHAT
 
-## **Education**
+## RUN PROJECT
 
-### Belarusian State University of Informatics and Radioelectronics [bsuir.by](https://www.bsuir.by/ "BSUIR.by")
+1. Just ```git clone``` my repository or download ```.zip``` file
+2. In /cli-chat/.env paste your telegram TOKEN
+3. Open /cli-chat/ directory, then run ```npm i```
+4. Run ```npm run start```
 
-#### 1\. Bachelour degree
+## SETTINGS
 
-- **Faculty:** Faculty of Computer-Aided Design
+For autoconnect to ws chat in settings/settings.config  must store configs in this format:
 
-- **Department**: Information and Computer-Aided Systems Design
+```
+USERNAME = "your_username"
+WS_CHAT_URL = "your_wschaturl"
+MESSAGES_TO_DISPLAY_AT_START = "number_of_messages"
+RECONNECT_INTERVAL = "number_of_ms"
+DATE_COLOR = "your_color_keyword"
+OTHER_USERS_COLOR = "your_color_keyword"
+MY_COLOR = "your_color_keyword"
+```
 
-- **Education form:** Full-time
+If you paste in OTHER_USERS_COLOR = "different color for each user" you can separate all users by color.
 
-- **Degree:** Bachelor
+Keyword color information you can find here: https://www.w3.org/wiki/CSS/Properties/color/keywords
 
-- **Graduation year:** 2016
+If you do not have this "settings.config", when you run ```npm run start``` in command line will be displayed that you do not have settings for chat and you must answer a couple of questions.
 
-#### 2\. Master degree
+After this questions "settings.config" will be created with your preferences and stored in settings/settings.config.
 
-- **Faculty:** Faculty of Computer-Aided Design
+## TELEGRAMBOT
 
-- **Department:** Information and Computer-Aided Systems Design
+TelegramBot (cli-chat-rudzenia-bot) starts when you run server ```npm run start```.
 
-- **Education form:** Distant
+To start chatting via TelegramBot use this telegram link: [cli-chat-rudzenia-bot](https://t.me/Cli_Chat_for_ST2019_bot "https://t.me/Cli_Chat_for_ST2019_bot")
 
-- **Degree:** Master of Engineering sciences
+cli-chat-rudzenia-bot supports the following commands:
 
-- **Graduation year:** 2019
+- ```/help``` - Use to display all available commands.
+- ```/startchat``` - For start chatting in ws chat. You login at ws chat with your telegram username. And begin receive all chat messages from ws chat.
+- ```/stopchat``` - For stop chatting in ws chat. You logout and stop receiving chat messages from ws chat.
+- ```/send any_text``` - Bot sends any_text to ws chat on its own behalf.
+- ```/love``` - Bot sends you a love emoji.
+- ```/happy``` - Bot sends you a happySmile emoji.
 
-## **Active email**
+### TelegramBot behavior explanation
 
-**viktarrudzenia@gmail.com**
+When you type in TelegramBot "/startchat" you become member of ws chat with your telegram username,  as confirmation to connect - you receive greeting message. After that you get all new messages and can post your own messages.
+To stop chatting in ws chat you type "/stopchat", as disconnect confirmation - you receive a goodbye message.
+Also you can send any message from bot behalf, just use "/send any_text", where "any_text" - what are you want post to ws chat from bot.
+Use "/help" in any difficult situation to get help info.
 
-## **Mobile Phone**
+## HISTORY
 
-**+375333901357**
-
-## **Work experience**
-
-### Main Data Processing Centre under the state association "Belarusian Railway"
-
-1. **Position**: Software Engineer (31.01.2016 - 31.07.2016).
-
-2. **Position**: Systems Engineer (31.07.2016 - 31.01.2019).
-
-3. **Position**: Systems Engineer 2 category (31.01.2019 - 15.11.2019).
+In /history/ logs all history for every connection in txt format: "MM-DD-YYYY HH-MM-SS.txt".
